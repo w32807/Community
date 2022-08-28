@@ -17,7 +17,7 @@ import java.net.URLEncoder;
 
 @Slf4j
 @Component
-public class CustomLoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+public class FormLoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 	
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {

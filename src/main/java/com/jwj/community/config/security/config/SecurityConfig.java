@@ -1,10 +1,11 @@
 package com.jwj.community.config.security.config;
 
-import com.jwj.community.config.security.handler.CustomAccessDeniedHandler;
-import com.jwj.community.config.security.provider.CustomAuthenticationProvider;
+import com.jwj.community.config.security.handler.FormAccessDeniedHandler;
+import com.jwj.community.config.security.provider.FormAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,6 +19,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
+@Order(1)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -60,7 +62,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider(){
-        return new CustomAuthenticationProvider(userDetailsService, passwordEncoder());
+        return new FormAuthenticationProvider(userDetailsService, passwordEncoder());
     }
 
     @Bean
@@ -70,7 +72,7 @@ public class SecurityConfig {
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler(){
-        AccessDeniedHandler accessDeniedHandler = new CustomAccessDeniedHandler();
+        AccessDeniedHandler accessDeniedHandler = new FormAccessDeniedHandler();
         return accessDeniedHandler;
     }
 

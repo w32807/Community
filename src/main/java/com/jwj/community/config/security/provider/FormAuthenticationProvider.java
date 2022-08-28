@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * 사용자 로그인 시 회원정보, 비밀번호를 체크하는 Provider
  */
 @RequiredArgsConstructor
-public class CustomAuthenticationProvider implements AuthenticationProvider {
+public class FormAuthenticationProvider implements AuthenticationProvider {
 
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
@@ -41,7 +41,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public boolean supports(Class<?> authentication) {
-        // 인증 객체가 UsernamePasswordAuthenticationToken와 같을 때 authenticate 메소드 호출
+        // 인증 객체가 UsernamePasswordAuthenticationToken과 같을 때 authenticate 메소드 호출
         return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
     }
 }

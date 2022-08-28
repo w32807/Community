@@ -21,7 +21,7 @@ import static com.jwj.community.web.common.constant.SessionConst.LOGIN_USER;
 
 @Slf4j
 @Component
-public class CustomLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+public class FormLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
 	// 인증 전 사용자가 요청했던 페이지가 있는 경우, 인증 후 요청했던 페이지로 이동하기 위해 선언
 	private RequestCache requestCache = new HttpSessionRequestCache();
