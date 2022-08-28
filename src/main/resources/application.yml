@@ -1,0 +1,75 @@
+# spring 2.4 버전부터 profiles 선언 방식이 변경됨
+# spring.profiles.active임을 주의하자!
+# 그리고 구분자 및 spring.config.activate.on-profile로 설정을 구분할 수 있다.
+spring:
+  profiles:
+    active: test
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/test
+    username: sa
+    password:
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+
+#Spring security를 본격 구현하기 전 테스트 로그인 계정
+  security:
+    debug: false
+
+  main.banner-mode: off
+
+  messages:
+    basename: message/messages,errors
+
+  servlet:
+    multipart:
+      enabled: true
+      location: C:\\upload
+      max-request-size: 30MB
+      max-file-size: 10MB
+
+logging:
+  level:
+    root: info
+    org:
+      hibernate.SQL: info
+    # hibernate.type: trace
+      springframework: error
+
+#URL에 세션 ID가 붙는 것 방지
+server:
+  servlet:
+    session:
+      tracking-modes: cookie
+      timeout: 1800
+
+#파일경로
+file.common.dir: C:\\upload\common\
+file.image.dir: C:\\upload\image\
+file.excel.dir: C:\\upload\excel\

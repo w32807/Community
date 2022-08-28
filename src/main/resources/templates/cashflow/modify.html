@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+	.errorMsg{
+		color: red;
+	}
+</style>
+<!--/* 마치 인클루드처럼, basic 레이아웃을 1개 만들고 내부의 화면은 따로 매개변수처럼 넣어줌 */-->
+<th:block th:replace="~{/layout/layout :: setContent(~{::title}, ~{this::content})}">
+	<title th:text="#{cashflow.title.modify}"/>
+	<th:block th:fragment="content">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-7">
+					<div class="card shadow-lg border-0 rounded-lg mt-5">
+						<div class="card-header"><h3 class="text-center font-weight-light my-4" th:text="#{cashflow.title.modify}"/></div>
+						<div class="card-body">
+							<form th:object="${dto}" th:action="@{/cashflow/modify}" method="post">
+								<div class="row mb-3">
+									<div class="col-md-4">
+										<div class="form-floating">
+											<select class="form-select py-0" id="lClasCode" name="lClasCode" th:onchange="'getMclasCodes(this.value);'">
+												<option value='' th:text="#{field.lclas.choose}"/>
+												/* th:field를 쓰면 필드와 매핑시켜주면서 html에 id, name을 쓰지 않아도 필드명을 가진 id, name을 생성 해 준다.
+													그러나 selectBox를 쓸 때 th:field와 th:selected는 동시에 작동하지 않는다.
+													그러므로 해결책으로 id, name을 html에 명시적으로 작성한 뒤, th:field를 사용하지 않는다.
+													그래도 무조건 필드 접근은 *{}, 값타입 접근은 ${}, message properties의 값 접근은 #{}를 사용한다.
+													그리고 필드?.getMethod 형식으로 물음표를 붙여주면, 필드의 null 체크도 같이 적용되니 유용하다.*/
+												<option th:each="lCode : ${lClasCodes}" th:value="${lCode.code}" th:text="${lCode.title}"
+														th:selected="*{lClasCode?.getCode()} == ${lCode.code}"/>
+											</select>
+											<span class="errorMsg" th:if="${#fields.hasErrors('lClasCode')}" th:errors="*{lClasCode}"/>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-floating">
+											<select class="form-select py-0" id="mClasCode" name="mClasCode" th:onchange="'getSclasCodes(this.value);'">
+												<option value='' th:text="#{field.mclas.choose}"/>
+												<option th:each="mCode : ${mClasCodes}" th:value="${mCode.code}" th:text="${mCode.title}"
+														th:selected="*{mClasCode?.getCode()} == ${mCode.code}"/>
+											</select>
+											<span class="errorMsg" th:if="${#fields.hasErrors('mClasCode')}" th:errors="*{mClasCode}"/>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-floating">
+											<select class="form-select py-0" id="sClasCode" name="sClasCode">
+												<option value='' th:text="#{field.sclas.choose}"/>
+												<option th:each="sCode : ${sClasCodes}" th:value="${sCode.code}" th:text="${sCode.title}"
+														th:selected="*{sClasCode?.getCode()} == ${sCode.code}"/>
+											</select>
+											<span class="errorMsg" th:if="${#fields.hasErrors('sClasCode')}" th:errors="*{sClasCode}"/>
+										</div>
+									</div>
+									<div class="col-md-4 pt-3">
+										<div class="form-floating mb-3 mb-md-0">
+											<input class="form-control datepicker" id="registDate" type="text" th:field="*{registDate}" th:placeholder="#{ph.registDate}"/>
+											<label for="registDate" th:text="#{field.registDate}">
+												<i class="fa fa-calendar me-1"></i>
+											</label>
+											<span class="errorMsg" th:if="${#fields.hasErrors('registDate')}" th:errors="*{registDate}"/>
+										</div>
+									</div>
+									<div class="col-md-8 pt-3">
+										<div class="form-floating">
+											<input class="form-control" id="amount" type="text" th:field="*{amount}"
+												   th:placeholder="#{ph.amount}" onkeyup="setNumComma(this)" maxlength="24"/>
+											<label for="amount" th:text="#{field.amount}"/>
+											<span class="errorMsg" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"/>
+										</div>
+									</div>
+								</div>
+								<div class="form-floating mb-3 ">
+									<input class="form-control" id="note" type="text" th:field="*{note}" th:placeholder="#{ph.note}" maxlength="70"/>
+									<label for="note" th:text="#{field.note}"/>
+								</div>
+								<div class="mt-4 mb-0">
+									<div class="d-inline-block float-end"><a class="btn btn-danger" th:onclick="|location.href='@{/cashflow/delete/{cfno}(cfno=${dto.cfno})}'|"
+																			 th:text="#{btn.delete}"/></div>
+									<div class="d-inline-block float-end me-3"><a class="btn btn-primary" onclick="save()" th:text="#{btn.modify}"/></div>
+								</div>
+								<input type="hidden" th:field="*{cfno}">
+							</form>
+						</div>
+						<div id="todoTable" class="card-body">
+							<div class="row">
+								<div class="col-xl-12">
+									<div class="card mb-4">
+										<div class="card-header">
+											<i class="fas fa-chart-area me-1"></i>
+											<span th:text="#{todo.title}"/>
+										</div>
+										<div class="card-body">
+											<table id="datatablesSimple1">
+												<colgroup>
+													<col style="width: 7%" >
+													<col style="width: 13%" >
+													<col style="width: 13%">
+													<col style="width: 13%">
+													<col style="width: 13%">
+													<col style="width: 13%">
+													<col style="width: 23%">
+												</colgroup>
+												<thead>
+												<tr>
+													<th th:text="#{field.complete}"/>
+													<th th:text="#{field.registDate}"/>
+													<th th:text="#{field.lclas}"/>
+													<th th:text="#{field.mclas}"/>
+													<th th:text="#{field.sclas}"/>
+													<th th:text="#{field.amount}"/>
+													<th th:text="#{field.note}"/>
+												</tr>
+												</thead>
+												<tbody>
+													<tr th:each="dto : ${todoList}">
+														<td class="text-center">
+															<input type="radio" class="form-check-input" name="completeYn" value="${dto.toDono }"
+																th:checked="${dto.completeYn eq true ? 'checked' : ''}">
+														</td>
+														<td class="text-center">
+															<td th:text="${dto.registDate}"/>
+														</td>
+														<td class="text-center">
+															<td th:text="${dto.getLClasCode().title}"/>
+														</td>
+														<td class="text-center">
+															<td th:text="${dto.getMClasCode().title}"/>
+														</td>
+														<td class="text-center">
+															<td th:text="${dto.getSClasCode().title}"/>
+														</td>
+														<td class="text-end">
+															<td th:text="${#numbers.formatInteger(dto.amount, 0, 'COMMA')}"/>
+														</td>
+														<td class="text-start">
+															<td th:text="${dto.note}"/>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</th:block>
+</th:block>
+
+<script th:inline="javascript">
+	var datatablesSimple1, isTodoList;
+
+	$(document).ready(function() {
+		var msg = [[${msg}]];
+		isTodoList = [[${isTodoList}]];
+
+		if(!isStrNull(msg)) alert(msg);
+
+		if(!isStrNull(isTodoList) && isTodoList === 'Y'){
+			$('#todoTable').show();
+			initTable();
+			setClasCode();
+		}else{
+			$('#todoTable').hide();
+		}
+	});
+
+	function save(){
+		var formData = $('form')
+		// 월별할일을 등록할 때
+		if(!isStrNull(isTodoList) && isTodoList === 'Y'){
+			var toDono = $("input[name='completeYn']:checked").val();
+
+			if(isStrNull(toDono)){
+				alert('등록 할 월별할일을 선택 해 주세요');
+				return false;
+			}
+
+			formData.append($('<input/>', {type : 'hidden', name : 'toDono', value : toDono }));
+			formData.attr('action', '/cashflow/registerWithTodo')
+		}
+		formData.submit();
+	}
+
+	function remove(){
+		console.log("delete")
+	}
+
+	function getMclasCodes(lClasCode){
+		$('#mClasCode').html('');
+		$('#sClasCode').html('');
+
+		if(isStrNull(lClasCode)) return false;
+
+		comAjax({'lClasCode' : lClasCode}, '/cashflow/mClasCodes',
+			function (data){
+				$('#mClasCode').html('<option value="">[중분류선택]</option>' + makeOption(data));
+			},
+			function (){}
+		)
+	}
+
+	function getSclasCodes(mClasCode){
+		$('#sClasCode').html('');
+
+		if(isStrNull(mClasCode)) return false;
+
+		comAjax({'mClasCode' : mClasCode}, '/cashflow/sClasCodes',
+			function (data){
+				$('#sClasCode').html('<option value="">[소분류선택]</option>' + makeOption(data));
+			},
+			function (){}
+		)
+	}
+
+	function makeOption(data){
+		var str = '';
+		data.forEach (function (item) {
+			str += '<option value=' + item.code + '>' + item.title + '</option>';
+		});
+		return str;
+	}
+
+	function initTable(){
+		datatablesSimple1 = $('#datatablesSimple1')[0];
+	    datatable1 = new simpleDatatables.DataTable(datatablesSimple1,
+								{
+									searchable: false,
+									//paging : false,
+									fixedColumns : false,
+									labels: {
+									    noRows: "등록된 데이터가 없습니다.",
+									},
+								}
+							);
+	}
+</script>

@@ -1,0 +1,21 @@
+[
+  {
+    "email" : "admin1@google.com",
+    "password" : "1234",
+    "confirmPassword" : "1234",
+    "nickname" : "별명1"
+  },
+  {
+    "email" : "admin2@google.com",
+    "password" : "1234",
+    "confirmPassword" : "1234",
+    "nickname" : "별명2"
+  },
+  {
+    "email" : "admin3@google.com",
+    "password" : "1234",
+    "confirmPassword" : "1234",
+    "nickname" : "별명3"
+  }
+]
+

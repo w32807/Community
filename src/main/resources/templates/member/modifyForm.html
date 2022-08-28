@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+	.dataTable-container > table > thead > tr > th,
+	.dataTable-container > table > tbody > tr > td{
+		text-align: center;
+	}
+</style>
+<!--/* 마치 인클루드처럼, basic 레이아웃을 1개 만들고 내부의 화면은 따로 매개변수처럼 넣어줌 */-->
+<th:block th:replace="~{/layout/emptyLayout :: setContent(~{::title}, ~{this::content})}">
+	<title th:text="#{member.title.modify}"/>
+	<th:block th:fragment="content">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-9">
+					<div class="card shadow-lg border-0 rounded-lg mt-5">
+						<div class="card-header"><h3 class="text-center font-weight-light my-4" th:text="#{member.title.modify}"/></div>
+						<div class="card-body">
+							<form th:object="${dto}" th:action="@{/member/modifyMember}" method="post">
+								<div class="row mb-3">
+									<div class="col-md-12 pt-3">
+										<div class="form-floating">
+											<input class="form-control" id="email" type="text" th:field="*{email}" th:placeholder="#{ph.email}" readonly="readonly"/>
+											<label for="email" th:text="#{field.email}"/>
+											<span class="errorMsg" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"/>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-3">
+									<div class="col-md-12 pt-3">
+										<div class="form-floating">
+											<input class="form-control" id="password" type="password" th:field="*{password}" th:placeholder="#{ph.password}"/>
+											<label for="password" th:text="#{field.password}"/>
+											<span class="errorMsg" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"/>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-3">
+									<div class="col-md-12 pt-3">
+										<div class="form-floating">
+											<input class="form-control" id="confirmPassword" type="password" th:field="*{confirmPassword}" th:placeholder="#{ph.confirmPassword}"/>
+											<label for="confirmPassword" th:text="#{field.confirmPassword}"/>
+											<span class="errorMsg" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"/>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-3">
+									<div class="col-md-12 pt-3">
+										<div class="form-floating">
+											<input class="form-control" id="name" type="text" th:field="*{name}" th:placeholder="#{ph.name}"/>
+											<label for="name" th:text="#{field.name}"/>
+											<span class="errorMsg" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"/>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-3">
+									<div class="col-md-12 pt-3">
+										<div class="form-floating">
+											<input class="form-control" id="nick" type="text" th:field="*{nick}" th:placeholder="#{ph.nick}" readonly="readonly"/>
+											<label for="nick" th:text="#{field.nick}"/>
+											<span class="errorMsg" th:if="${#fields.hasErrors('nick')}" th:errors="*{nick}"/>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-3">
+									<div class="col-md-12 pt-3">
+										<div class="form-floating">
+											<input class="form-control" id="phone" type="text" th:field="*{phone}" th:placeholder="#{ph.phone}"/>
+											<label for="phone" th:text="#{field.phone}"/>
+											<span class="errorMsg" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"/>
+										</div>
+									</div>
+								</div>
+								<div class="mt-4 mb-0">
+									<div class="d-grid"><a class="btn btn-primary btn-block" onclick="joinMember()" th:text="#{btn.save}"/></div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</th:block>
+</th:block>
+
+<script th:inline="javascript">
+	$(document).ready(function() {
+	});
+
+	function joinMember(){
+		$('form').submit();
+	}
+</script>

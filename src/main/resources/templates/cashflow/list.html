@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+	.dataTable-container > table > thead > tr > th,
+	.dataTable-container > table > tbody > tr > td{
+		text-align: center;
+	}
+</style>
+<!--/* 마치 인클루드처럼, basic 레이아웃을 1개 만들고 내부의 화면은 따로 매개변수처럼 넣어줌 */-->
+<th:block th:replace="~{/layout/layout :: setContent(~{::title}, ~{this::content})}">
+	<title th:text="#{cashflow.title}"/>
+	<th:block th:fragment="content">
+		<div class="container-fluid px-4">
+			<h1 class="mt-4" th:text="#{cashflow.title}"/>
+			<ol class="breadcrumb mb-4">
+				<li class="breadcrumb-item active" th:text="#{cashflow.title}"/>
+			</ol>
+			<div class="row">
+				<div class="col-xl-12">
+					<div class="card mb-4">
+						<div class="card-header">
+							<i class="fas fa-chart-area me-1"></i>
+							<span th:text="#{todo.title}"/>
+						</div>
+						<div class="card-body">
+							<table id="datatablesSimple1">
+								<caption class="caption-top ms-sm-3 fs-4">[[${'[' + requestDto.monthFm} + ']']] [[#{todo.title}]]</caption>
+								<colgroup>
+									<col style="width: 10%" >
+									<col style="width: 10%" >
+									<col style="width: 10%" >
+									<col style="width: 10%" >
+									<col style="width: 10%" >
+									<col style="width: 10%" >
+									<col style="width: 10%" >
+									<col style="width: 30%" >
+								</colgroup>
+								<thead>
+								<tr>
+									<th th:text="#{field.registDate}"/>
+									<th th:text="#{field.menu}"/>
+									<th th:text="#{field.lclas}"/>
+									<th th:text="#{field.mclas}"/>
+									<th th:text="#{field.sclas}"/>
+									<th th:text="#{field.amount}"/>
+									<th th:text="#{field.completeAt}"/>
+									<th th:text="#{field.note}"/>
+								</tr>
+								</thead>
+								<tbody>
+									<th:block th:each="dto : ${todoList.dtoList}">
+										<tr th:onclick="'movePage(\'' + ${dto.getSClasCode().code} + ',' + ${requestDto.monthFm } + ',' + ${requestDto.cfno } + '\')'">
+											<td class="text-center">
+												[[${dto.registDate}]]
+											</td>
+											<td class="text-center">
+												[[${dto.menu}]]
+											</td>
+											<td class="text-center">
+												[[${dto.lClasCode.title}]]
+											</td>
+											<td class="text-center">
+												[[${dto.mClasCode.title}]]
+											</td>
+											<td class="text-center">
+												[[${dto.sClasCode.title}]]
+											</td>
+											<td class="text-end">
+												[[${dto.amount}]]
+											</td>
+											<td class="text-center">
+												[[${dto.completeYn}]]
+											</td>
+											<td class="text-start">
+												[[${dto.note}]]
+											</td>
+										</tr>
+									</th:block>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xl-12">
+					<div class="card mb-4">
+						<div class="card-header">
+							<i class="fas fa-chart-area me-1"></i>
+						</div>
+						<div class="card-body">
+							<table id="datatablesSimple2">
+								<caption class="caption-top ms-sm-3 fs-4">[[${'[' + requestDto.monthFm} + ']']] [[#{field.mclas.sum}]]</caption>
+								<colgroup>
+									<col style="width: 50%" >
+									<col style="width: 50%">
+								</colgroup>
+								<thead>
+								<tr>
+									<th th:text="#{field.classification}"/>
+									<th th:text="#{field.amount}"/>
+								</tr>
+								</thead>
+								<tbody>
+									<tr th:each="dto : ${groupingByMclasCodeList.list}">
+										<td class="text-center">
+											[[${dto.str1}]]
+										</td>
+										<td class="text-end">
+											<!--/* bigDec1의 타입을 맞춰주려면? */-->
+											[[${dto.bigDec1}]]
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<table id="datatablesSimple3">
+								<caption class="caption-top ms-sm-3 fs-4">[[${requestDto.monthFm }]] [[#{field.total.sum}]]</caption>
+								<colgroup>
+									<col style="width: 50%" >
+									<col style="width: 50%">
+								</colgroup>
+								<thead>
+								<tr>
+									<th th:text="#{field.flag}"/>
+									<th th:text="#{field.amount}"/>
+								</tr>
+								</thead>
+								<tbody>
+									<tr th:each="dto : ${sumryList.list}">
+										<td class="text-center">
+											[[${dto.str1}]]
+										</td>
+										<td class="text-end">
+											<!--/* bigDec1의 타입을 맞춰주려면? */-->
+											[[${dto.bigDec1}]]
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xl-12">
+					<div class="card mb-4">
+						<div class="card-header">
+							<i class="fas fa-table me-1"></i>
+							[[#{table}]]
+							<a class="float-end btn btn-success" th:href="@{/cashflow/register}" th:text="#{btn.registe}"/>
+						</div>
+						<div class="card-body">
+							<form th:object="${requestDto}" th:action="@{/cashflow/list}">
+								<div class="form-floating mb-3">
+									<input class="form-control monthpicker form-check-inline w-auto py-0 text-center"
+										   th:field="*{monthFm}" id="monthFm" type="text" readonly="readonly"/>
+									<label path="monthFm" ><i class="fas fa-calendar"></i></label>
+								</div>
+								<div class="d-flex align-items-center justify-content-between mt-4 mb-0 flex-row-reverse">
+									<button class="btn btn-primary btn-block" >조회</button>
+								</div>
+							</form>
+							<table id="datatablesSimple4">
+								<caption class="caption-top ms-sm-3 fs-4">[[#{field.debtor}]]</caption>
+								<colgroup>
+									<col style="width: 13%" >
+									<col style="width: 13%">
+									<col style="width: 13%">
+									<col style="width: 13%">
+									<col style="width: 13%">
+									<col style="width: 35%">
+								</colgroup>
+								<thead>
+								<tr>
+									<th th:text="#{field.registDate}"/>
+									<th th:text="#{field.lclas}"/>
+									<th th:text="#{field.mclas}"/>
+									<th th:text="#{field.sclas}"/>
+									<th th:text="#{field.amount}"/>
+									<th th:text="#{field.note}"/>
+								</tr>
+								</thead>
+								<tbody>
+									<th:block th:each="dto : ${crditList.dtoList}">
+										<tr th:onclick="'modify(\'' + ${dto.cfno} + '\')'">
+											<td class="text-center">
+												[[${dto.registDate}]]
+											</td>
+											<td>
+												[[${dto.lClasCode.title}]]
+											</td>
+											<td>
+												[[${dto.mClasCode.title}]]
+											</td>
+											<td>
+												[[${dto.sClasCode.title}]]
+											</td>
+											<td class="text-end">
+												[[${dto.amount}]]
+											</td>
+											<td class="text-start">
+												[[${dto.note}]]
+											</td>
+										</tr>
+									</th:block>
+								</tbody>
+							</table>
+							<table id="datatablesSimple5">
+								<caption class="caption-top ms-sm-3 fs-4">[[#{field.crdit}]]</caption>
+								<colgroup>
+									<col style="width: 13%" >
+									<col style="width: 13%">
+									<col style="width: 13%">
+									<col style="width: 13%">
+									<col style="width: 13%">
+									<col style="width: 35%">
+								</colgroup>
+								<thead>
+								<tr>
+									<th th:text="#{field.registDate}"/>
+									<th th:text="#{field.lclas}"/>
+									<th th:text="#{field.mclas}"/>
+									<th th:text="#{field.sclas}"/>
+									<th th:text="#{field.amount}"/>
+									<th th:text="#{field.note}"/>
+								</tr>
+								</thead>
+								<tbody>
+									<th:block th:each="dto : ${debtorList.dtoList}">
+										<tr th:onclick="'modify(\'' + ${dto.cfno} + '\')'">
+											<td class="text-center">
+												[[${dto.registDate}]]
+											</td>
+											<td>
+												[[${dto.lClasCode.title}]]
+											</td>
+											<td>
+												[[${dto.mClasCode.title}]]
+											</td>
+											<td>
+												[[${dto.sClasCode.title}]]
+											</td>
+											<td class="text-end">
+												[[${dto.amount}]]
+											</td>
+											<td class="text-start">
+												[[${dto.note}]]
+											</td>
+										</tr>
+									</th:block>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</th:block>
+</th:block>
+
+<script th:inline="javascript">
+	var datatablesSimple1, datatablesSimple2, datatablesSimple3, datatablesSimple4, datatablesSimple5;
+
+	$(document).ready(function(){
+		// 등록, 삭제, 수정 알림
+		var msg = [[${msg}]];
+		if(!isStrNull(msg)) alert(msg);
+
+		initTable();
+	});
+
+	function initTable(){
+		// document.getElementById와 같은 결과를 가져오기 위해서는 [0]까지 붙여줘야 함
+	    datatablesSimple1 = $('#datatablesSimple1')[0];
+	    datatablesSimple2 = $('#datatablesSimple2')[0];
+	    datatablesSimple3 = $('#datatablesSimple3')[0];
+	    datatablesSimple4 = $('#datatablesSimple4')[0];
+	    datatablesSimple5 = $('#datatablesSimple5')[0];
+
+	    datatable1 = new simpleDatatables.DataTable(datatablesSimple1,
+								{
+									searchable: false,
+									//paging : false,
+									fixedColumns : false,
+									labels: {
+									    noRows: "등록된 데이터가 없습니다.",
+									},
+								}
+							);
+
+	    datatable2 = new simpleDatatables.DataTable(datatablesSimple2,
+								{
+									searchable: false,
+									//paging : false,
+									fixedColumns : false,
+									labels: {
+									    noRows: "등록된 데이터가 없습니다.",
+									},
+								}
+							);
+
+	    datatable3 = new simpleDatatables.DataTable(datatablesSimple3,
+								{
+									searchable: false,
+									//paging : false,
+									fixedColumns : false,
+									labels: {
+									    noRows: "등록된 데이터가 없습니다.",
+									},
+								}
+							);
+
+	    datatable4 = new simpleDatatables.DataTable(datatablesSimple4,
+								{
+									searchable: false,
+									//paging : false,
+									fixedColumns : false,
+									labels: {
+									    noRows: "등록된 데이터가 없습니다.",
+									},
+								}
+							);
+
+	    datatable5 = new simpleDatatables.DataTable(datatablesSimple5,
+								{
+									searchable: false,
+									//paging : false,
+									fixedColumns : false,
+									labels: {
+									    noRows: "등록된 데이터가 없습니다.",
+									},
+								}
+							);
+
+		$(datatable2.wrapper).css("float", "left");
+		$(datatable2.wrapper).css("width", "49%");
+
+		$(datatable3.wrapper).css("float", "right");
+		$(datatable3.wrapper).css("width", "49%");
+
+		$(datatable4.wrapper).css("float", "left");
+		$(datatable4.wrapper).css("width", "49%");
+
+		$(datatable5.wrapper).css("float", "right");
+		$(datatable5.wrapper).css("width", "49%");
+	}
+
+	function modify(key){
+		var formData = $('<form></form>');
+
+		formData.attr('method', 'get').attr('action', '/cashflow/modify/' + key);
+		formData.appendTo('body'); // 동적 생성한 form은 body에 붙여줘야 전송된다.
+		formData.submit();
+	}
+
+	function movePage(code, yearMonth, cfno){
+		var formData = $('<form></form>');
+
+		formData.attr('method', 'get').attr('action', (cfno > 0) ? '/cashflow/modifyWithTodo' : '/cashflow/registWithTodo');
+		formData.append($('<input/>', {type : 'hidden', name : 'keyword', value : code }));
+		formData.append($('<input/>', {type : 'hidden', name : 'keyword2', value : cfno }));
+		formData.append($('<input/>', {type : 'hidden', name : 'monthFm', value : yearMonth }));
+		formData.append($('<input/>', {type : 'hidden', name : 'monthTo', value : yearMonth }));
+		formData.appendTo('body'); // 동적 생성한 form은 body에 붙여줘야 전송된다.
+		formData.submit();
+	}
+
+</script>
