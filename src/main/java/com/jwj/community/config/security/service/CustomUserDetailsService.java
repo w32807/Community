@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.toList;
  */
 @Service
 @RequiredArgsConstructor
-public class FormUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
 
