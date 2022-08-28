@@ -2,6 +2,7 @@ package com.jwj.community.config.security.config;
 
 import com.jwj.community.domain.entity.Member;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -10,6 +11,7 @@ import java.util.Collection;
 /**
  * 사용자 로그인 시 Spring Security 필터에서 사용할 인증용 Context 클래스
  */
+@Setter
 @Getter
 public class LoginContext extends User {
 
