@@ -1,8 +1,11 @@
 package com.jwj.community.web.login;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jwj.community.domain.member.service.MemberService;
+import com.jwj.community.web.login.request.MemberSaveRequest;
 import lombok.Builder;
 import lombok.Data;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
 @AutoConfigureMockMvc // SpringBootTest와 MockMvc 주입을 같이할 때 사용!
@@ -29,7 +33,21 @@ public class AjaxLoginTest {
     private MockMvc mockMvc;
 
     @Autowired
+    private MemberService memberService;
+
+    @Autowired
     private ObjectMapper objectMapper;
+
+    @BeforeEach
+    public void setup(){
+        MemberSaveRequest request = MemberSaveRequest.builder()
+                .email("admin@google.com")
+                .password("1234")
+                .nickname("닉네임")
+                .build();
+
+        memberService.createMember(request.toEntity());
+    }
 
     LoginTestDTO loginTestDTO = LoginTestDTO.builder()
             .email("admin@google.com")
@@ -48,7 +66,8 @@ public class AjaxLoginTest {
                 .with(csrf().asHeader())
                 .header("X-Requested-With", "XMLHttpRequest")
                 .content(loginTestDTOByte)
-                .contentType(APPLICATION_JSON));
+                .contentType(APPLICATION_JSON))
+                .andExpect(jsonPath("$.email").value("admin@google.com"));
     }
 
     @Test
@@ -59,13 +78,12 @@ public class AjaxLoginTest {
 
         // when
         // then
-        assertThatThrownBy(() -> {
-            mockMvc.perform(post("/api/login")
-                    .with(csrf().asHeader())
-                    .header("X-Requested-With", "Ajax요청이 아님")
-                    .content(loginTestDTOByte)
-                    .contentType(APPLICATION_JSON));
-        }).isInstanceOf(IllegalStateException.class);
+        mockMvc.perform(post("/api/login")
+                .with(csrf().asHeader())
+                .header("X-Requested-With", "Ajax요청이 아님")
+                .content(loginTestDTOByte)
+                .contentType(APPLICATION_JSON))
+        .andExpect(jsonPath("$.email").value("admin@google.com"));
     }
 
     @Test

@@ -25,6 +25,7 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
         String username = authentication.getName();
         String password = (String) authentication.getCredentials();
 
+
         LoginContext loginContext = (LoginContext) userDetailsService.loadUserByUsername(username);
 
         if(!passwordEncoder.matches(password, loginContext.getMember().getPassword())){
