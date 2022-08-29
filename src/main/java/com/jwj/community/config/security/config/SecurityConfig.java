@@ -1,6 +1,9 @@
 package com.jwj.community.config.security.config;
 
 import com.jwj.community.config.security.handler.FormAccessDeniedHandler;
+import com.jwj.community.config.security.handler.FormLoginFailureHandler;
+import com.jwj.community.config.security.handler.FormLoginSuccessHandler;
+import com.jwj.community.config.security.provider.FormAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +12,8 @@ import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -19,10 +24,9 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final AuthenticationProvider formAuthenticationProvider;
+    private final UserDetailsService userDetailsService;
     private final AuthenticationDetailsSource authenticationDetailsSource;
-    private final AuthenticationSuccessHandler successHandler;
-    private final AuthenticationFailureHandler failureHandler;
+    private final PasswordEncoder passwordEncoder;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
@@ -43,12 +47,12 @@ public class SecurityConfig {
             .usernameParameter("email")
             .passwordParameter("password")
             .loginProcessingUrl("/login/loginProcess") // 여기서 설정한 URL이 호출되면 로그인 인증처리를 하는 UsernamePasswordAuthenticationFilter가 실행된다
-            .successHandler(successHandler) // successHandler를 우선적용하기 위해서는 defaultSuccessUrl보다 아래에 선언해주어야 한다.
-            .failureHandler(failureHandler)
+            .successHandler(formLoginSuccessHandler()) // successHandler를 우선적용하기 위해서는 defaultSuccessUrl보다 아래에 선언해주어야 한다.
+            .failureHandler(formLoginFailureHandler())
             .authenticationDetailsSource(authenticationDetailsSource)
             .permitAll();
 
-        http.authenticationProvider(formAuthenticationProvider);
+        http.authenticationProvider(formAuthenticationProvider());
 
         http.exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler());
@@ -57,8 +61,23 @@ public class SecurityConfig {
     }
 
     @Bean
+    public AuthenticationProvider formAuthenticationProvider(){
+        return new FormAuthenticationProvider(userDetailsService, passwordEncoder);
+    }
+
+    @Bean
     public AccessDeniedHandler accessDeniedHandler(){
         return new FormAccessDeniedHandler();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler formLoginSuccessHandler() throws Exception {
+        return new FormLoginSuccessHandler();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler formLoginFailureHandler() throws Exception {
+        return new FormLoginFailureHandler();
     }
 
 }
