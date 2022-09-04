@@ -2,8 +2,6 @@ package com.jwj.community.config.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jwj.community.domain.entity.Member;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -11,6 +9,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
@@ -23,8 +24,9 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
         // token 생성 시 넣어주는 1번째 파라미터값이 principal이 된다.
         Member member = (Member) authentication.getPrincipal();
 
-        response.setStatus(HttpStatus.OK.value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setStatus(OK.value());
+        response.setContentType(APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
 
         objectMapper.writeValue(response.getWriter(), member);
     }

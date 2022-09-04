@@ -11,12 +11,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
+import static java.net.URLEncoder.encode;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc // SpringBootTest와 MockMvc 주입을 같이할 때 사용!
@@ -56,8 +58,8 @@ public class LoginTest {
                 .passwordParam("password")
                 .user(loginEmail)
                 .password(loginPassword))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/main/home"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/main/home"))
                 .andExpect(authenticated().withRoles("MEMBER"));
 
     }
@@ -76,8 +78,8 @@ public class LoginTest {
                 .passwordParam("password")
                 .user(loginEmail)
                 .password(loginPassword))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/login/loginFail?error=true&exception=이메일을 확인 해 주세요"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login/loginFail?error=true&exception=" + encode("이메일을 확인 해 주세요", "UTF-8")))
                 .andExpect(unauthenticated())
                 .andDo(MockMvcResultHandlers.print());
     }
@@ -96,8 +98,8 @@ public class LoginTest {
                 .passwordParam("password")
                 .user(loginEmail)
                 .password(loginPassword))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/login/loginFail?error=true&exception=비밀번호를 확인 해 주세요"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login/loginFail?error=true&exception=" + encode("비밀번호를 확인 해 주세요", "UTF-8")))
                 .andExpect(unauthenticated());
     }
 
