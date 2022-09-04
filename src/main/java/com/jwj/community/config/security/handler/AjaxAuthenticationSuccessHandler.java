@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -26,7 +27,7 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
 
         response.setStatus(OK.value());
         response.setContentType(APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding(UTF_8.name());
 
         objectMapper.writeValue(response.getWriter(), member);
     }

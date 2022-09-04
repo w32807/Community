@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -28,7 +29,7 @@ public class AjaxLoginAuthenticationEntryPoint implements AuthenticationEntryPoi
                 .build();
 
         response.setStatus(UNAUTHORIZED.value());
-        response.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding(UTF_8.name());
         response.setContentType(APPLICATION_JSON_VALUE);
 
         objectMapper.writeValue(response.getWriter(), errorResult);

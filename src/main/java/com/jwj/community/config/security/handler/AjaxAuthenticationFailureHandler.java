@@ -2,8 +2,6 @@ package com.jwj.community.config.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jwj.community.web.exception.dto.ErrorResult;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
@@ -17,6 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 public class AjaxAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -26,13 +28,13 @@ public class AjaxAuthenticationFailureHandler implements AuthenticationFailureHa
         throws IOException, ServletException {
 
         ErrorResult errorResult = ErrorResult.builder()
-                .errorCode(HttpStatus.UNAUTHORIZED.value())
+                .errorCode(UNAUTHORIZED.value())
                 .errorMessage(getErrorMessage(exception))
                 .build();
 
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding("UTF-8");
+        response.setStatus(UNAUTHORIZED.value());
+        response.setContentType(APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding(UTF_8.name());
 
         objectMapper.writeValue(response.getWriter(), errorResult);
     }
