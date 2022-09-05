@@ -33,10 +33,17 @@ function isStrNull(str){
 
 function comAjax(json, url, successCallback, errCallback){
 	// dataType을 명시하지 않으면 모든 타입의 데이터를 서버로부터 가져올 수 있음
+	var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+	var csrfToken = $('meta[name="_csrf"]').attr('content');
+
 	$.ajax({
 		url: url,
 		type: "post",
 		data: json,
+		beforeSend: function(xhr){
+		    xhr.setRequestHeader(csrfHeader, csrfToken);
+		    xhr.setRequestHeader("XMLHttpRequest", "X-Requested-With");
+		},
 		success: function(data) {
 			if(typeof successCallback === 'function') successCallback(data);
 		},
