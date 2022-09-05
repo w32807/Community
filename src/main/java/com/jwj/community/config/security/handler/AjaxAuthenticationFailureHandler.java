@@ -13,7 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
@@ -39,7 +38,7 @@ public class AjaxAuthenticationFailureHandler implements AuthenticationFailureHa
         objectMapper.writeValue(response.getWriter(), errorResult);
     }
 
-    private String getErrorMessage(AuthenticationException exception) throws UnsupportedEncodingException {
+    private String getErrorMessage(AuthenticationException exception) {
         String errorMessage = "이메일 혹은 비밀번호를 확인 해 주세요.";
 
         if(exception instanceof UsernameNotFoundException){

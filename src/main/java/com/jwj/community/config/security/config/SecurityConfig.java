@@ -71,12 +71,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationSuccessHandler formLoginSuccessHandler() throws Exception {
+    public AuthenticationSuccessHandler formLoginSuccessHandler() {
         return new FormLoginSuccessHandler();
     }
 
     @Bean
-    public AuthenticationFailureHandler formLoginFailureHandler() throws Exception {
+    public AuthenticationFailureHandler formLoginFailureHandler() {
         return new FormLoginFailureHandler();
     }
 

@@ -29,6 +29,6 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
         response.setContentType(APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(UTF_8.name());
 
-        objectMapper.writeValue(response.getWriter(), member);
+        objectMapper.writeValue(response.getWriter(), member.toResponse());
     }
 }
