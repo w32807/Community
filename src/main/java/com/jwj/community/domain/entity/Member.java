@@ -11,7 +11,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static com.jwj.community.domain.common.enums.Level.LEVEL1;
@@ -32,6 +34,9 @@ public class Member extends BaseEntity {
     private int levelPoint = 0;
     private Level level = LEVEL1;
     private MemberState state = ACTIVE;
+
+    @OneToMany(mappedBy = "member")
+    private List<Board> boards = new ArrayList<>();
 
     public Member(MemberSaveRequest request) {
         this.email = request.getEmail();
