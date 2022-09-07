@@ -8,7 +8,7 @@ import javax.validation.constraints.NotEmpty;
 
 @Data
 @Builder
-public class BoardRequest {
+public class BoardSaveRequest {
 
     @NotEmpty
     private String title;

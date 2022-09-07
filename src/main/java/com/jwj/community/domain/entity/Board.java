@@ -1,19 +1,24 @@
 package com.jwj.community.domain.entity;
 
+import com.jwj.community.web.board.dto.response.BoardResponse;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 import static java.lang.Integer.MAX_VALUE;
 import static java.lang.Math.min;
+import static javax.persistence.GenerationType.AUTO;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = PROTECTED)
 public class Board extends BaseEntity{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = AUTO)
     private Long id;
 
     private String title;
@@ -41,5 +46,13 @@ public class Board extends BaseEntity{
 
     public void addView(){
         this.views = min(++views, MAX_VALUE);
+    }
+
+    public BoardResponse toResponse(){
+        return BoardResponse.builder()
+                .id(this.id)
+                .title(this.title)
+                .content(this.content)
+                .build();
     }
 }
