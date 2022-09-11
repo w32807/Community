@@ -23,6 +23,10 @@ public class MemberService {
         return member.getId();
     }
 
+    public Member findByEmail(String email){
+        return memberRepository.findByEmail(email);
+    }
+
     private String encode(String password){
         return passwordEncoder.encode(password);
     }
