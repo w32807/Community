@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestControllerAdvice
 public class CommonRestControllerAdvice {
@@ -16,11 +17,11 @@ public class CommonRestControllerAdvice {
     @ExceptionHandler
     public ResponseEntity<ErrorResult> boardNotFoundExHandler(BoardNotFound ex){
         ErrorResult errorResult = ErrorResult.builder()
-                .errorCode(BAD_REQUEST.value())
+                .errorCode(NOT_FOUND.value())
                 .errorMessage(ex.getMessage())
                 .build();
 
-        return new ResponseEntity<>(errorResult, BAD_REQUEST);
+        return new ResponseEntity<>(errorResult, NOT_FOUND);
     }
 
     @ExceptionHandler
