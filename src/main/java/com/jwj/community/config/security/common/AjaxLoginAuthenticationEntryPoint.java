@@ -24,7 +24,7 @@ public class AjaxLoginAuthenticationEntryPoint implements AuthenticationEntryPoi
 
         // 익명사용자가 인가가 필요한 자원에 접근하였을 때 처리
         ErrorResult errorResult = ErrorResult.builder()
-                .errorCode(UNAUTHORIZED.value())
+                .errorCode(String.valueOf(UNAUTHORIZED.value()))
                 .errorMessage("인증되지 않은 사용자입니다.")
                 .build();
 

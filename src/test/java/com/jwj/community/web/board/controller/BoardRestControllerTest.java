@@ -19,6 +19,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Locale;
+
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -140,8 +142,8 @@ class BoardRestControllerTest {
         // expected
         mockMvc.perform(get("/board/{id}", id))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.errorCode").value(NOT_FOUND.value()))
-                .andExpect(jsonPath("$.errorMessage").value(messageSource.getMessage("error.noBoard", null, null)))
+                .andExpect(jsonPath("$.errorCode").value(String.valueOf(NOT_FOUND.value())))
+                .andExpect(jsonPath("$.errorMessage").value(messageSource.getMessage("error.noBoard", null, Locale.getDefault())))
                 .andDo(print());
     }
 
@@ -166,9 +168,6 @@ class BoardRestControllerTest {
                 .andDo(print());
 
         mockMvc.perform(get("/board/{id}", id))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.errorCode").value(NOT_FOUND.value()))
-                .andExpect(jsonPath("$.errorMessage").value(messageSource.getMessage("error.noBoard", null, null)))
                 .andDo(print());
     }
 
@@ -209,9 +208,9 @@ class BoardRestControllerTest {
                 .content(objectMapper.writeValueAsString(boardSaveRequest))
                 .with(csrf().asHeader()))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errorCode").value(BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.errorCode").value(String.valueOf(BAD_REQUEST.value())))
                 .andExpect(jsonPath("$.fieldErrors.[0].field").value("title"))
-                .andExpect(jsonPath("$.fieldErrors.[0].message").value(messageSource.getMessage("field.required.title", null, null)))
+                .andExpect(jsonPath("$.fieldErrors.[0].message").value(messageSource.getMessage("field.required.title", null, Locale.getDefault())))
                 .andDo(print());
     }
 
@@ -231,9 +230,9 @@ class BoardRestControllerTest {
                 .content(objectMapper.writeValueAsString(boardSaveRequest))
                 .with(csrf().asHeader()))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errorCode").value(BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.errorCode").value(String.valueOf(BAD_REQUEST.value())))
                 .andExpect(jsonPath("$.fieldErrors.[0].field").value("content"))
-                .andExpect(jsonPath("$.fieldErrors.[0].message").value(messageSource.getMessage("field.required.content", null, null)))
+                .andExpect(jsonPath("$.fieldErrors.[0].message").value(messageSource.getMessage("field.required.content", null, Locale.getDefault())))
                 .andDo(print());
     }
 
@@ -295,9 +294,9 @@ class BoardRestControllerTest {
                 .content(objectMapper.writeValueAsString(boardUpdateRequest))
                 .with(csrf().asHeader()))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errorCode").value(BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.errorCode").value(String.valueOf(BAD_REQUEST.value())))
                 .andExpect(jsonPath("$.fieldErrors.[0].field").value("title"))
-                .andExpect(jsonPath("$.fieldErrors.[0].message").value(messageSource.getMessage("field.required.title", null, null)))
+                .andExpect(jsonPath("$.fieldErrors.[0].message").value(messageSource.getMessage("field.required.title", null, Locale.getDefault())))
                 .andDo(print());
     }
 
@@ -324,9 +323,9 @@ class BoardRestControllerTest {
                 .content(objectMapper.writeValueAsString(boardUpdateRequest))
                 .with(csrf().asHeader()))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errorCode").value(BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.errorCode").value(String.valueOf(BAD_REQUEST.value())))
                 .andExpect(jsonPath("$.fieldErrors.[0].field").value("content"))
-                .andExpect(jsonPath("$.fieldErrors.[0].message").value(messageSource.getMessage("field.required.content", null, null)))
+                .andExpect(jsonPath("$.fieldErrors.[0].message").value(messageSource.getMessage("field.required.content", null, Locale.getDefault())))
                 .andDo(print());
     }
 

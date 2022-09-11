@@ -10,11 +10,11 @@ import java.util.List;
 @Data
 public class FieldErrorResult {
 
-    private final int errorCode;
+    private final String errorCode;
     private final List<FieldError> fieldErrors = new ArrayList<>();
 
     @Builder
-    public FieldErrorResult(int errorCode, MethodArgumentNotValidException ex){
+    public FieldErrorResult(String errorCode, MethodArgumentNotValidException ex){
         this.errorCode = errorCode;
         setFieldErrors(ex);
     }

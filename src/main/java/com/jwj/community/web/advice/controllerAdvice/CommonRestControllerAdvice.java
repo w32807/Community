@@ -1,33 +1,35 @@
 package com.jwj.community.web.advice.controllerAdvice;
 
-import com.jwj.community.web.exception.board.BoardNotFound;
 import com.jwj.community.web.exception.dto.ErrorResult;
 import com.jwj.community.web.exception.dto.FieldErrorResult;
+import com.jwj.community.web.exception.exceptions.common.CommunityException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import static java.lang.Integer.parseInt;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestControllerAdvice
 public class CommonRestControllerAdvice {
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResult> boardNotFoundExHandler(BoardNotFound ex){
+    public ResponseEntity<ErrorResult> communityExHandler(CommunityException ex){
         ErrorResult errorResult = ErrorResult.builder()
-                .errorCode(NOT_FOUND.value())
+                .errorCode(ex.getStatusCode())
                 .errorMessage(ex.getMessage())
                 .build();
-
-        return new ResponseEntity<>(errorResult, NOT_FOUND);
+        System.out.println("zzz");
+        System.out.println(parseInt(ex.getStatusCode()));
+        return new ResponseEntity<>(errorResult, HttpStatus.valueOf(parseInt(ex.getStatusCode())));
     }
 
     @ExceptionHandler
     public ResponseEntity<FieldErrorResult> methodArgumentNotValidExHandler(MethodArgumentNotValidException ex){
         FieldErrorResult errorResult = FieldErrorResult.builder()
-                .errorCode(BAD_REQUEST.value())
+                .errorCode(String.valueOf(BAD_REQUEST.value()))
                 .ex(ex)
                 .build();
 

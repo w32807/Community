@@ -84,7 +84,7 @@ public class AjaxLoginTest {
                 .header("X-Requested-With", "Ajax요청이 아님")
                 .content(loginTestDTOByte)
                 .contentType(APPLICATION_JSON))
-                .andExpect(jsonPath("$.errorCode").value(401))
+                .andExpect(jsonPath("$.errorCode").value("401"))
                 .andExpect(jsonPath("$.errorMessage").value("Ajax 요청이 아닙니다."))
                 .andDo(print());
 
@@ -109,7 +109,7 @@ public class AjaxLoginTest {
                 .header("X-Requested-With", "XMLHttpRequest")
                 .content(loginTestDTOByte)
                 .contentType(APPLICATION_JSON))
-                .andExpect(jsonPath("$.errorCode").value(401))
+                .andExpect(jsonPath("$.errorCode").value("401"))
                 .andExpect(jsonPath("$.errorMessage").value("이메일을 확인 해 주세요."))
                 .andDo(print());
     }
@@ -132,7 +132,7 @@ public class AjaxLoginTest {
                 .header("X-Requested-With", "XMLHttpRequest")
                 .content(loginTestDTOByte)
                 .contentType(APPLICATION_JSON))
-                .andExpect(jsonPath("$.errorCode").value(401))
+                .andExpect(jsonPath("$.errorCode").value("401"))
                 .andExpect(jsonPath("$.errorMessage").value("비밀번호를 확인 해 주세요."))
                 .andDo(print());
     }
@@ -154,7 +154,7 @@ public class AjaxLoginTest {
                 .header("X-Requested-With", "XMLHttpRequest")
                 .content(loginTestDTOByte)
                 .contentType(APPLICATION_JSON))
-                .andExpect(jsonPath("$.errorCode").value(401))
+                .andExpect(jsonPath("$.errorCode").value("401"))
                 .andExpect(jsonPath("$.errorMessage").value("이메일을 확인 해 주세요."))
                 .andDo(print());
     }
@@ -176,7 +176,7 @@ public class AjaxLoginTest {
                 .header("X-Requested-With", "XMLHttpRequest")
                 .content(loginTestDTOByte)
                 .contentType(APPLICATION_JSON))
-                .andExpect(jsonPath("$.errorCode").value(401))
+                .andExpect(jsonPath("$.errorCode").value("401"))
                 .andExpect(jsonPath("$.errorMessage").value("비밀번호를 확인 해 주세요."))
                 .andDo(print());
     }
@@ -199,7 +199,7 @@ public class AjaxLoginTest {
                 .header("X-Requested-With", "XMLHttpRequest")
                 .content(loginTestDTOByte)
                 .contentType(APPLICATION_JSON))
-                .andExpect(jsonPath("$.errorCode").value(401))
+                .andExpect(jsonPath("$.errorCode").value("401"))
                 .andExpect(jsonPath("$.errorMessage").value("이메일을 확인 해 주세요."))
                 .andDo(print());
     }

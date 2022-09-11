@@ -4,7 +4,7 @@ import com.jwj.community.domain.entity.Board;
 import com.jwj.community.domain.entity.Member;
 import com.jwj.community.domain.member.repository.MemberRepository;
 import com.jwj.community.web.board.dto.request.BoardSaveRequest;
-import com.jwj.community.web.exception.board.BoardNotFound;
+import com.jwj.community.web.exception.exceptions.board.BoardNotFound;
 import com.jwj.community.web.login.request.MemberSaveRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -92,9 +92,7 @@ class BoardServiceTest {
         Long boardId = boardService.addBoard(boardSaveRequest.toEntity(), savedMember);
 
         // then
-        assertThatThrownBy(() -> {
-            boardService.getBoard(boardId + 1);
-        }).isInstanceOf(BoardNotFound.class);
+        assertThatThrownBy(() -> boardService.getBoard(boardId + 1)).isInstanceOf(BoardNotFound.class);
     }
 
     @Test
@@ -140,9 +138,7 @@ class BoardServiceTest {
         boardService.deleteBoard(boardId);
 
         // then
-        assertThatThrownBy(() -> {
-            boardService.getBoard(boardId);
-        }).isInstanceOf(BoardNotFound.class);
+        assertThatThrownBy(() -> boardService.getBoard(boardId)).isInstanceOf(BoardNotFound.class);
     }
 
 }
