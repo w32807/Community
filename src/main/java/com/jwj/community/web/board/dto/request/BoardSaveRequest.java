@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @Builder
@@ -14,13 +14,13 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 public class BoardSaveRequest {
 
-    @NotEmpty(message = "{field.required.title}")
+    @NotBlank(message = "{field.required.title}")
     private String title;
 
-    @NotEmpty(message = "{field.required.content}")
+    @NotBlank(message = "{field.required.content}")
     private String content;
 
-    @NotEmpty
+    @NotBlank
     private String email;
 
     public Board toEntity(){

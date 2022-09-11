@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -18,10 +18,10 @@ public class BoardUpdateRequest {
     @NotNull
     private Long id;
 
-    @NotEmpty(message = "{field.required.title}")
+    @NotBlank(message = "{field.required.title}")
     private String title;
 
-    @NotEmpty(message = "{field.required.content}")
+    @NotBlank(message = "{field.required.content}")
     private String content;
 
     public Board toEntity(){
