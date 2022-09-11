@@ -1,5 +1,6 @@
 package com.jwj.community.web.advice.controllerAdvice;
 
+import com.jwj.community.web.exception.board.BoardNotFound;
 import com.jwj.community.web.exception.dto.ErrorResult;
 import com.jwj.community.web.exception.dto.FieldErrorResult;
 import org.springframework.http.ResponseEntity;
@@ -7,15 +8,13 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.persistence.EntityNotFoundException;
-
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestControllerAdvice
 public class CommonRestControllerAdvice {
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResult> entityNotFoundExHandler(EntityNotFoundException ex){
+    public ResponseEntity<ErrorResult> boardNotFoundExHandler(BoardNotFound ex){
         ErrorResult errorResult = ErrorResult.builder()
                 .errorCode(BAD_REQUEST.value())
                 .errorMessage(ex.getMessage())

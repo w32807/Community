@@ -4,11 +4,11 @@ import com.jwj.community.domain.board.dto.BoardEditor;
 import com.jwj.community.domain.board.repository.BoardRepository;
 import com.jwj.community.domain.entity.Board;
 import com.jwj.community.domain.entity.Member;
+import com.jwj.community.web.exception.board.BoardNotFound;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -23,7 +23,7 @@ public class BoardService {
         return boardRepository.save(board).getId();
     }
 
-    public Board getBoard(Long id) throws EntityNotFoundException{
+    public Board getBoard(Long id) throws BoardNotFound{
         Board savedBoard = getSavedBoard(id);
         savedBoard.addView();
 
@@ -35,12 +35,12 @@ public class BoardService {
     }
 
     public void deleteBoard(Long id){
-        boardRepository.deleteById(id);
+        Board savedBoard = getSavedBoard(id);
+        boardRepository.deleteById(savedBoard.getId());
     }
 
-    public Long updateBoard(Board board) throws EntityNotFoundException{
+    public Long updateBoard(Board board) throws BoardNotFound{
         Board savedBoard = getSavedBoard(board.getId());
-
         BoardEditor.BoardEditorBuilder editorBuilder = savedBoard.toEditor();
 
         savedBoard.edit(
@@ -52,8 +52,8 @@ public class BoardService {
         return savedBoard.getId();
     }
 
-    private Board getSavedBoard(Long id) throws EntityNotFoundException{
+    private Board getSavedBoard(Long id) throws BoardNotFound {
         return boardRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.noBoard", null, null)));
+                .orElseThrow(() -> new BoardNotFound(messageSource.getMessage("error.noBoard", null, null)));
     }
 }

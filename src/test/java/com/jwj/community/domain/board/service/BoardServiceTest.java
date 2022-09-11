@@ -4,6 +4,7 @@ import com.jwj.community.domain.entity.Board;
 import com.jwj.community.domain.entity.Member;
 import com.jwj.community.domain.member.repository.MemberRepository;
 import com.jwj.community.web.board.dto.request.BoardSaveRequest;
+import com.jwj.community.web.exception.board.BoardNotFound;
 import com.jwj.community.web.login.request.MemberSaveRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -94,7 +94,7 @@ class BoardServiceTest {
         // then
         assertThatThrownBy(() -> {
             boardService.getBoard(boardId + 1);
-        }).isInstanceOf(EntityNotFoundException.class);
+        }).isInstanceOf(BoardNotFound.class);
     }
 
     @Test
@@ -142,7 +142,7 @@ class BoardServiceTest {
         // then
         assertThatThrownBy(() -> {
             boardService.getBoard(boardId);
-        }).isInstanceOf(EntityNotFoundException.class);
+        }).isInstanceOf(BoardNotFound.class);
     }
 
 }
