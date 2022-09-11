@@ -7,12 +7,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardSaveRequest {
+public class BoardUpdateRequest {
+
+    @NotNull
+    private Long id;
 
     @NotEmpty(message = "{field.required.title}")
     private String title;
@@ -20,11 +24,9 @@ public class BoardSaveRequest {
     @NotEmpty(message = "{field.required.content}")
     private String content;
 
-    @NotEmpty
-    private String email;
-
     public Board toEntity(){
-        return Board.create()
+        return Board.update()
+                .id(this.id)
                 .title(this.title)
                 .content(this.content)
                 .build();

@@ -31,7 +31,14 @@ public class Board extends BaseEntity{
     @ManyToOne
     private Member member;
 
-    @Builder
+    @Builder(builderMethodName = "update")
+    public Board(Long id, String title, String content){
+        this.id = id;
+        this.title = title;
+        this.content = content;
+    }
+
+    @Builder(builderMethodName = "create")
     public Board(String title, String content){
         this.title = title;
         this.content = content;
@@ -42,6 +49,14 @@ public class Board extends BaseEntity{
         if(!member.getBoards().contains(this)){
             member.getBoards().add(this);
         }
+    }
+
+    public void changeTitle(String title){
+        this.title = title;
+    }
+
+    public void changeContent(String content){
+        this.content = content;
     }
 
     public void addView(){
