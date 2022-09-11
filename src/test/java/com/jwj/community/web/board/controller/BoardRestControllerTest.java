@@ -79,8 +79,7 @@ class BoardRestControllerTest {
         boardService.addBoard(boardSaveRequest1.toEntity(), savedMember);
         boardService.addBoard(boardSaveRequest2.toEntity(), savedMember);
 
-        // when
-        // then
+        // expected
         mockMvc.perform(get("/board/boards"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size").value(2))
@@ -100,8 +99,7 @@ class BoardRestControllerTest {
     void test2() throws Exception{
         // given
 
-        // when
-        // then
+        // expected
         mockMvc.perform(get("/board/boards"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size").value(0))
@@ -121,8 +119,7 @@ class BoardRestControllerTest {
 
         boardService.addBoard(boardSaveRequest.toEntity(), savedMember);
 
-        // when
-        // then
+        // expected
         mockMvc.perform(get("/board/{id}", 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.id").value(1))
@@ -137,8 +134,7 @@ class BoardRestControllerTest {
     void test4() throws Exception{
         // given
         Long id = -1L;
-        // when
-        // then
+        // expected
         mockMvc.perform(get("/board/{id}", id))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorCode").value(400))
@@ -160,8 +156,7 @@ class BoardRestControllerTest {
 
         boardService.addBoard(boardSaveRequest.toEntity(), savedMember);
 
-        // when
-        // then
+        // expected
         mockMvc.perform(delete("/board/{id}", id)
                 .with(csrf().asHeader()))
                 .andExpect(status().isOk())
@@ -185,8 +180,7 @@ class BoardRestControllerTest {
                 .email(saveMemberEmail)
                 .build();
 
-        // when
-        // then
+        // expected
         mockMvc.perform(post("/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardSaveRequest))
@@ -206,8 +200,7 @@ class BoardRestControllerTest {
                 .email(saveMemberEmail)
                 .build();
 
-        // when
-        // then
+        // expected
         mockMvc.perform(post("/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardSaveRequest))
@@ -229,8 +222,7 @@ class BoardRestControllerTest {
                 .email(saveMemberEmail)
                 .build();
 
-        // when
-        // then
+        // expected
         mockMvc.perform(post("/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardSaveRequest))
@@ -260,8 +252,7 @@ class BoardRestControllerTest {
                 .content("수정한 내용1")
                 .build();
 
-        // when
-        // then
+        // expected
         mockMvc.perform(put("/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardUpdateRequest))
@@ -295,8 +286,7 @@ class BoardRestControllerTest {
                 .content("수정한 내용1")
                 .build();
 
-        // when
-        // then
+        // expected
         mockMvc.perform(put("/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardUpdateRequest))
@@ -325,8 +315,7 @@ class BoardRestControllerTest {
                 .title("수정한 글 제목1")
                 .build();
 
-        // when
-        // then
+        // expected
         mockMvc.perform(put("/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardUpdateRequest))
