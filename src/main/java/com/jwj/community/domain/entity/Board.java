@@ -1,5 +1,6 @@
 package com.jwj.community.domain.entity;
 
+import com.jwj.community.domain.board.dto.BoardEditor;
 import com.jwj.community.web.board.dto.response.BoardResponse;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,12 +52,15 @@ public class Board extends BaseEntity{
         }
     }
 
-    public void changeTitle(String title){
-        this.title = title;
+    public BoardEditor.BoardEditorBuilder toEditor(){
+        return BoardEditor.builder()
+                .title(this.title)
+                .content(this.content);
     }
 
-    public void changeContent(String content){
-        this.content = content;
+    public void edit(BoardEditor boardEditor){
+        this.title = boardEditor.getTitle();
+        this.content = boardEditor.getContent();
     }
 
     public void addView(){

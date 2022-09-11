@@ -1,5 +1,6 @@
 package com.jwj.community.domain.board.service;
 
+import com.jwj.community.domain.board.dto.BoardEditor;
 import com.jwj.community.domain.board.repository.BoardRepository;
 import com.jwj.community.domain.entity.Board;
 import com.jwj.community.domain.entity.Member;
@@ -39,8 +40,14 @@ public class BoardService {
 
     public Long updateBoard(Board board) throws EntityNotFoundException{
         Board savedBoard = getSavedBoard(board.getId());
-        savedBoard.changeTitle(board.getTitle());
-        savedBoard.changeContent(board.getContent());
+
+        BoardEditor.BoardEditorBuilder editorBuilder = savedBoard.toEditor();
+
+        savedBoard.edit(
+                editorBuilder
+                .title(board.getTitle())
+                .content(board.getContent())
+                .build());
 
         return savedBoard.getId();
     }
