@@ -10,27 +10,29 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 
 @SpringBootTest
 @ExtendWith(RestDocumentationExtension.class)
 @Transactional
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "api.community.com", uriPort = 443)
+@AutoConfigureMockMvc
 public class BoardRestControllerDocTest {
 
+    @Autowired
     private MockMvc mockMvc;
 
     @Autowired
@@ -44,11 +46,7 @@ public class BoardRestControllerDocTest {
     private Member savedMember;
 
     @BeforeEach
-    public void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .apply(documentationConfiguration(restDocumentation))
-                .build();
-
+    public void setUp() {
         MemberSaveRequest memberSaveRequest = MemberSaveRequest.builder()
                 .email(saveMemberEmail)
                 .password("1234")
@@ -59,6 +57,7 @@ public class BoardRestControllerDocTest {
 
     @Test
     @DisplayName("아무개")
+    @WithMockUser
     void test1() throws Exception{
         // given
         BoardSaveRequest boardSaveRequest = BoardSaveRequest.builder()
