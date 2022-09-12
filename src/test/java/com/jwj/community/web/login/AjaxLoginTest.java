@@ -60,8 +60,7 @@ public class AjaxLoginTest {
         // given
         byte[] loginTestDTOByte = objectMapper.writeValueAsString(loginTestDTO).getBytes(UTF_8);
 
-        // when
-        // then
+        // expected
         mockMvc.perform(post("/api/login")
                 .with(csrf().asHeader())
                 .header("X-Requested-With", "XMLHttpRequest")
@@ -77,8 +76,7 @@ public class AjaxLoginTest {
         // given
         byte[] loginTestDTOByte = objectMapper.writeValueAsString(loginTestDTO).getBytes(UTF_8);
 
-        // when
-        // then
+        // expected
         mockMvc.perform(post("/api/login")
                 .with(csrf().asHeader())
                 .header("X-Requested-With", "Ajax요청이 아님")
@@ -102,8 +100,7 @@ public class AjaxLoginTest {
 
         byte[] loginTestDTOByte = objectMapper.writeValueAsString(loginTestDTO).getBytes(UTF_8);
 
-        // when
-        // then
+        // expected
         mockMvc.perform(post("/api/login")
                 .with(csrf().asHeader())
                 .header("X-Requested-With", "XMLHttpRequest")
@@ -125,8 +122,7 @@ public class AjaxLoginTest {
 
         byte[] loginTestDTOByte = objectMapper.writeValueAsString(loginTestDTO).getBytes(UTF_8);
 
-        // when
-        // then
+        // expected
         mockMvc.perform(post("/api/login")
                 .with(csrf().asHeader())
                 .header("X-Requested-With", "XMLHttpRequest")
@@ -147,8 +143,7 @@ public class AjaxLoginTest {
 
         byte[] loginTestDTOByte = objectMapper.writeValueAsString(loginTestDTO).getBytes(UTF_8);
 
-        // when
-        // then
+        // expected
         mockMvc.perform(post("/api/login")
                 .with(csrf().asHeader())
                 .header("X-Requested-With", "XMLHttpRequest")
@@ -169,8 +164,7 @@ public class AjaxLoginTest {
 
         byte[] loginTestDTOByte = objectMapper.writeValueAsString(loginTestDTO).getBytes(UTF_8);
 
-        // when
-        // then
+        // expected
         mockMvc.perform(post("/api/login")
                 .with(csrf().asHeader())
                 .header("X-Requested-With", "XMLHttpRequest")
@@ -192,8 +186,7 @@ public class AjaxLoginTest {
 
         byte[] loginTestDTOByte = objectMapper.writeValueAsString(loginTestDTO).getBytes(UTF_8);
 
-        // when
-        // then
+        // expected
         mockMvc.perform(post("/api/login")
                 .with(csrf().asHeader())
                 .header("X-Requested-With", "XMLHttpRequest")
