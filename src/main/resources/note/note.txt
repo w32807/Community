@@ -2,6 +2,5 @@
     <html xmlns:th="http://www.thymeleaf.org"
           xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-
-
-
+2. vue를 node.js로 실행하기
+    >> npm run dev
