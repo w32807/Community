@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -62,11 +61,75 @@ public class JwtLoginTest {
 
         // expected
         mockMvc.perform(post("/api/login")
-                .with(csrf().asHeader())
-                .header("X-Requested-With", "XMLHttpRequest")
                 .content(loginTestDTOByte)
                 .contentType(APPLICATION_JSON))
-                .andExpect(jsonPath("$.email").value("admin@google.com"))
+                .andExpect(jsonPath("$.accessToken").isString())
+                .andExpect(jsonPath("$.refreshToken").isString())
+                .andDo(print());
+
+    }
+
+    @Test
+    @DisplayName("Jwt 인증 요청 아이디 없을 때")
+    public void test2() throws Exception{
+        // given
+        loginTestDTO.setEmail("");
+        byte[] loginTestDTOByte = objectMapper.writeValueAsString(loginTestDTO).getBytes(UTF_8);
+
+        // expected
+        mockMvc.perform(post("/api/login")
+                .content(loginTestDTOByte)
+                .contentType(APPLICATION_JSON))
+                .andExpect(jsonPath("$.errorCode").value("401"))
+                .andExpect(jsonPath("$.errorMessage").value("이메일을 확인 해 주세요."))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Jwt 인증 요청 아이디 null일 때")
+    public void test3() throws Exception{
+        // given
+        loginTestDTO.setEmail(null);
+        byte[] loginTestDTOByte = objectMapper.writeValueAsString(loginTestDTO).getBytes(UTF_8);
+
+        // expected
+        mockMvc.perform(post("/api/login")
+                .content(loginTestDTOByte)
+                .contentType(APPLICATION_JSON))
+                .andExpect(jsonPath("$.errorCode").value("401"))
+                .andExpect(jsonPath("$.errorMessage").value("이메일을 확인 해 주세요."))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Jwt 인증 요청 비밀번호 없을 때")
+    public void test4() throws Exception{
+        // given
+        loginTestDTO.setPassword("");
+        byte[] loginTestDTOByte = objectMapper.writeValueAsString(loginTestDTO).getBytes(UTF_8);
+
+        // expected
+        mockMvc.perform(post("/api/login")
+                .content(loginTestDTOByte)
+                .contentType(APPLICATION_JSON))
+                .andExpect(jsonPath("$.errorCode").value("401"))
+                .andExpect(jsonPath("$.errorMessage").value("비밀번호를 확인 해 주세요."))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("Jwt 인증 요청 비밀번호 null일 때")
+    public void test5() throws Exception{
+        // given
+        loginTestDTO.setPassword(null);
+        byte[] loginTestDTOByte = objectMapper.writeValueAsString(loginTestDTO).getBytes(UTF_8);
+
+        // expected
+        mockMvc.perform(post("/api/login")
+                .content(loginTestDTOByte)
+                .contentType(APPLICATION_JSON))
+                .andExpect(jsonPath("$.errorCode").value("401"))
+                .andExpect(jsonPath("$.errorMessage").value("비밀번호를 확인 해 주세요."))
                 .andDo(print());
     }
 
