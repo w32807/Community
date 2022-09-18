@@ -8,6 +8,7 @@ import lombok.Data;
 @Builder
 public class RefreshTokenRequest {
 
+    private String accessToken;
     private String refreshToken;
 
     public RefreshToken toEntity(){

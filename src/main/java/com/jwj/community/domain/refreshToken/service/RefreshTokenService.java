@@ -23,15 +23,20 @@ public class RefreshTokenService {
     private final MessageSource messageSource;
 
     public Long createRefreshToken(RefreshToken refreshToken, Member member) {
-        member.changeRefreshToken(refreshToken);
         refreshToken.setMember(member);
+        member.changeRefreshToken(refreshToken);
+
         return refreshTokenRepository.save(refreshToken).getId();
     }
 
-
-    public void changeRefreshToken(String email, JwtToken jwtToken) {
+    public RefreshToken changeRefreshToken(String email, JwtToken jwtToken) {
         Member savedMember = memberRepository.findByEmail(email);
-        refreshTokenRepository.findByMember(savedMember);
+        RefreshToken savedRefreshToken = refreshTokenRepository.findByMember(savedMember);
+
+        savedRefreshToken.changeRefreshToken(jwtToken.getRefreshToken());
+        savedMember.changeRefreshToken(savedRefreshToken);
+
+        return savedRefreshToken;
     }
 
     public RefreshToken getRefreshToken(Long id) throws RefreshTokenNotFound {
