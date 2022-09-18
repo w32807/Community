@@ -19,7 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,7 +64,7 @@ class BoardRestControllerTest {
 
     private Member savedMember;
 
-    private String jwtAccessToken;
+    private String accessToken;
 
     @BeforeEach
     void setup(){
@@ -81,12 +80,11 @@ class BoardRestControllerTest {
 
         savedMember = memberService.findById(memberService.createMember(memberSaveRequest.toEntity()));
         refreshTokenService.createRefreshToken(request.toEntity(), savedMember);
-        jwtAccessToken = jwtTokenFactory.getRequestJwtToken().getAccessToken();
+        accessToken = jwtTokenFactory.getRequestJwtToken().getAccessToken();
     }
 
     @Test
     @DisplayName("글 여러 개 조회하기")
-    @Rollback(value = false)
     void test1() throws Exception{
         // given
         BoardSaveRequest boardSaveRequest1 = BoardSaveRequest.builder()
@@ -104,7 +102,7 @@ class BoardRestControllerTest {
 
         // expected
         mockMvc.perform(get("/api/board/boards")
-                .header(AUTHORIZATION, jwtAccessToken))
+                .header(AUTHORIZATION, accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size").value(2))
                 .andExpect(jsonPath("$.list.length()").value(2))
@@ -125,7 +123,7 @@ class BoardRestControllerTest {
 
         // expected
         mockMvc.perform(get("/api/board/boards")
-                .header(AUTHORIZATION, jwtAccessToken))
+                .header(AUTHORIZATION, accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size").value(0))
                 .andExpect(jsonPath("$.list.length()").value(0))
@@ -146,7 +144,7 @@ class BoardRestControllerTest {
 
         // expected
         mockMvc.perform(get("/api/board/{id}", 1)
-                .header(AUTHORIZATION, jwtAccessToken))
+                .header(AUTHORIZATION, accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.id").value(1))
                 .andExpect(jsonPath("$.data.title").value("글 제목1"))
@@ -163,7 +161,7 @@ class BoardRestControllerTest {
 
         // expected
         mockMvc.perform(get("/api/board/{id}", id)
-                .header(AUTHORIZATION, jwtAccessToken))
+                .header(AUTHORIZATION, accessToken))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errorCode").value(String.valueOf(NOT_FOUND.value())))
                 .andExpect(jsonPath("$.errorMessage").value(messageSource.getMessage("error.noBoard", null, Locale.getDefault())))
@@ -186,7 +184,7 @@ class BoardRestControllerTest {
 
         // expected
         mockMvc.perform(delete("/api/board/{id}", id)
-                .header(AUTHORIZATION, jwtAccessToken))
+                .header(AUTHORIZATION, accessToken))
                 .andExpect(status().isOk())
                 .andDo(print());
 
@@ -209,7 +207,7 @@ class BoardRestControllerTest {
         mockMvc.perform(post("/api/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardSaveRequest))
-                .header(AUTHORIZATION, jwtAccessToken))
+                .header(AUTHORIZATION, accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").value(1L))
                 .andDo(print());
@@ -229,7 +227,7 @@ class BoardRestControllerTest {
         mockMvc.perform(post("/api/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardSaveRequest))
-                .header(AUTHORIZATION, jwtAccessToken))
+                .header(AUTHORIZATION, accessToken))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorCode").value(String.valueOf(BAD_REQUEST.value())))
                 .andExpect(jsonPath("$.fieldErrors.[0].field").value("title"))
@@ -251,7 +249,7 @@ class BoardRestControllerTest {
         mockMvc.perform(post("/api/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardSaveRequest))
-                .header(AUTHORIZATION, jwtAccessToken))
+                .header(AUTHORIZATION, accessToken))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorCode").value(String.valueOf(BAD_REQUEST.value())))
                 .andExpect(jsonPath("$.fieldErrors.[0].field").value("content"))
@@ -281,13 +279,13 @@ class BoardRestControllerTest {
         mockMvc.perform(put("/api/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardUpdateRequest))
-                .header(AUTHORIZATION, jwtAccessToken))
+                .header(AUTHORIZATION, accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").value(saveId))
                 .andDo(print());
 
         mockMvc.perform(get("/api/board/{id}", saveId)
-                .header(AUTHORIZATION, jwtAccessToken))
+                .header(AUTHORIZATION, accessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.id").value(saveId))
                 .andExpect(jsonPath("$.data.title").value("수정한 글 제목1"))
@@ -316,7 +314,7 @@ class BoardRestControllerTest {
         mockMvc.perform(put("/api/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardUpdateRequest))
-                .header(AUTHORIZATION, jwtAccessToken))
+                .header(AUTHORIZATION, accessToken))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorCode").value(String.valueOf(BAD_REQUEST.value())))
                 .andExpect(jsonPath("$.fieldErrors.[0].field").value("title"))
@@ -345,7 +343,7 @@ class BoardRestControllerTest {
         mockMvc.perform(put("/api/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardUpdateRequest))
-                .header(AUTHORIZATION, jwtAccessToken))
+                .header(AUTHORIZATION, accessToken))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorCode").value(String.valueOf(BAD_REQUEST.value())))
                 .andExpect(jsonPath("$.fieldErrors.[0].field").value("content"))
