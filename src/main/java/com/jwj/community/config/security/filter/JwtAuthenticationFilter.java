@@ -42,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final MessageSource messageSource;
     private final JwtTokenUtil jwtTokenUtil;
 
-    final String[] whitelist = {"/api/login", "/api/refresh"};
+    final String[] whitelist = {"/api/login", "/api/refresh/refresh"};
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -51,13 +51,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (!isRequiredAuthPath(requestURI)) {
             filterChain.doFilter(request, response);
-        }
-        if (!isValidAuthHeader(authorizationHeader)){
+        }else if (!isValidAuthHeader(authorizationHeader)){
             handleInvalidToken(response);
         }else{
             try{
                 // 토큰에서 username을 얻어와서 SecurityContextHolder에 저장 ("bearer 6자리와 띄어쓰기 1자리를 포함하여 자른다)
-                String accessToken = authorizationHeader.substring(TOKEN_HEADER_PREFIX.length() + 1);
+                String accessToken = jwtTokenUtil.removePrefix(authorizationHeader);
 
                 if(!jwtTokenUtil.isExpiredToken(accessToken)){
                     LoginContext loginContext = (LoginContext) userDetailsService.loadUserByUsername(jwtTokenUtil.getUsernameFromToken(accessToken));
