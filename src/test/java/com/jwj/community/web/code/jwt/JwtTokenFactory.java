@@ -45,7 +45,7 @@ public class JwtTokenFactory {
         return jwtToken;
     }
 
-    public JwtToken getRequestExpiredJwtToken(){
+    public JwtToken getExpiredRequestJwtToken(){
         JwtToken jwtToken = getExpiredJwtToken();
         jwtToken.setAccessToken(TOKEN_HEADER_PREFIX + " " + jwtToken.getAccessToken());
 
@@ -96,6 +96,7 @@ public class JwtTokenFactory {
                 .compact();
 
         String expiredRefreshToken = Jwts.builder()
+                .setSubject(member.getEmail())
                 .setExpiration(new Date(0))
                 .signWith(hmacShaKeyFor(encodedSecretKey(SECRET_KEY).getBytes(UTF_8)), HS256)
                 .compact();
