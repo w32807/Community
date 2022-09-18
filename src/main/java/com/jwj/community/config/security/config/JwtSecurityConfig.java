@@ -48,9 +48,11 @@ public class JwtSecurityConfig {
 
     @Bean(value = "jwtSecurityFilterChain")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.antMatcher("/api/**")
-                .authorizeRequests()
-                .anyRequest().authenticated();
+        http
+            .antMatcher("/api/**")
+            .authorizeRequests()
+            .antMatchers("/api/login", "/api/refresh/**").permitAll()
+            .anyRequest().authenticated();
 
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
