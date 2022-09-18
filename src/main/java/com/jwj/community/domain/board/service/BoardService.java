@@ -8,12 +8,15 @@ import com.jwj.community.web.exception.exceptions.board.BoardNotFound;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Locale;
+
+import static java.util.Locale.getDefault;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BoardService {
 
     private final BoardRepository boardRepository;
@@ -55,6 +58,6 @@ public class BoardService {
 
     private Board getSavedBoard(Long id) throws BoardNotFound {
         return boardRepository.findById(id)
-                .orElseThrow(() -> new BoardNotFound(messageSource.getMessage("error.noBoard", null, Locale.getDefault())));
+                .orElseThrow(() -> new BoardNotFound(messageSource.getMessage("error.noBoard", null, getDefault())));
     }
 }

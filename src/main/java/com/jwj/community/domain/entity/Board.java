@@ -46,6 +46,7 @@ public class Board extends BaseEntity{
     }
 
     public void setMember(Member member){
+        this.member = member;
         // 무한 루프에 빠지지 않도록 처리
         if(!member.getBoards().contains(this)){
             member.getBoards().add(this);

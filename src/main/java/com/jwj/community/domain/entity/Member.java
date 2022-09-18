@@ -36,8 +36,11 @@ public class Member extends BaseEntity {
     private Level level = LEVEL1;
     private MemberState state = ACTIVE;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Board> boards = new ArrayList<>();
+
+    @OneToOne
+    private RefreshToken refreshToken;
 
     public Member(MemberSaveRequest request) {
         this.email = request.getEmail();
@@ -67,6 +70,10 @@ public class Member extends BaseEntity {
 
     public void changePassword(String password) {
         this.password = password;
+    }
+
+    public void changeRefreshToken(RefreshToken refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     public MemberResponse toResponse(){

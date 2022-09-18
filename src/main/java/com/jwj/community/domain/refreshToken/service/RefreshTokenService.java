@@ -28,6 +28,7 @@ public class RefreshTokenService {
         return refreshTokenRepository.save(refreshToken).getId();
     }
 
+
     public void changeRefreshToken(String email, JwtToken jwtToken) {
         Member savedMember = memberRepository.findByEmail(email);
         refreshTokenRepository.findByMember(savedMember);
@@ -41,4 +42,5 @@ public class RefreshTokenService {
     public RefreshToken getRefreshTokenByMember(Member member) throws RefreshTokenNotFound {
         return refreshTokenRepository.findByMember(member);
     }
+
 }

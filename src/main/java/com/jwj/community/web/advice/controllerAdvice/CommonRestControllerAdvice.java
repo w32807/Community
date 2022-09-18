@@ -21,8 +21,7 @@ public class CommonRestControllerAdvice {
                 .errorCode(ex.getStatusCode())
                 .errorMessage(ex.getMessage())
                 .build();
-        System.out.println("zzz");
-        System.out.println(parseInt(ex.getStatusCode()));
+
         return new ResponseEntity<>(errorResult, HttpStatus.valueOf(parseInt(ex.getStatusCode())));
     }
 

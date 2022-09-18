@@ -2,6 +2,7 @@ package com.jwj.community.web.login;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jwj.community.domain.member.service.MemberService;
+import com.jwj.community.web.code.jwt.JwtTokenFactory;
 import com.jwj.community.web.login.request.MemberSaveRequest;
 import lombok.Builder;
 import lombok.Data;
@@ -35,6 +36,9 @@ public class JwtLoginTest {
     private MemberService memberService;
 
     @Autowired
+    private JwtTokenFactory jwtTokenFactory;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     LoginTestDTO loginTestDTO = LoginTestDTO.builder()
@@ -66,7 +70,6 @@ public class JwtLoginTest {
                 .andExpect(jsonPath("$.accessToken").isString())
                 .andExpect(jsonPath("$.refreshToken").isString())
                 .andDo(print());
-
     }
 
     @Test

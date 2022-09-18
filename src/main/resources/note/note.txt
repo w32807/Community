@@ -5,3 +5,15 @@
 
 
 
+1. JWT 구현하기
+
+    1) 스프링 시큐리티용 JWTSecurityConfig 생성
+    2) 의존성 추가하면 filter가 따로 있니??
+    3) authenticationManager, provider 필요
+    4) successHandler 필요
+    5) failureHandler 필요
+    6) deniedHandler, entryPoint 필요
+    7) token 필요
+    8) userDetailsService 필요
+
+

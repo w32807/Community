@@ -3,10 +3,13 @@ package com.jwj.community.web.board.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jwj.community.domain.board.service.BoardService;
 import com.jwj.community.domain.entity.Member;
-import com.jwj.community.domain.member.repository.MemberRepository;
+import com.jwj.community.domain.member.service.MemberService;
+import com.jwj.community.domain.refreshToken.service.RefreshTokenService;
 import com.jwj.community.web.board.dto.request.BoardSaveRequest;
 import com.jwj.community.web.board.dto.request.BoardUpdateRequest;
+import com.jwj.community.web.code.jwt.JwtTokenFactory;
 import com.jwj.community.web.login.request.MemberSaveRequest;
+import com.jwj.community.web.login.request.RefreshTokenRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,15 +19,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
 
+import static com.jwj.community.web.login.jwt.JwtConst.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -40,20 +44,28 @@ class BoardRestControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberService memberService;
 
     @Autowired
     private BoardService boardService;
 
     @Autowired
+    private RefreshTokenService refreshTokenService;
+
+    @Autowired
     private MessageSource messageSource;
+
+    @Autowired
+    private JwtTokenFactory jwtTokenFactory;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private String saveMemberEmail = "admin@google.com";
 
     private Member savedMember;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private String jwtAccessToken;
 
     @BeforeEach
     void setup(){
@@ -62,12 +74,19 @@ class BoardRestControllerTest {
                 .password("1234")
                 .build();
 
-        savedMember = memberRepository.save(memberSaveRequest.toEntity());
+        // given
+        RefreshTokenRequest request = RefreshTokenRequest.builder()
+                .refreshToken(jwtTokenFactory.getJwtToken().getRefreshToken())
+                .build();
+
+        savedMember = memberService.findById(memberService.createMember(memberSaveRequest.toEntity()));
+        refreshTokenService.createRefreshToken(request.toEntity(), savedMember);
+        jwtAccessToken = jwtTokenFactory.getRequestJwtToken().getAccessToken();
     }
 
     @Test
     @DisplayName("글 여러 개 조회하기")
-    @WithMockUser
+    @Rollback(value = false)
     void test1() throws Exception{
         // given
         BoardSaveRequest boardSaveRequest1 = BoardSaveRequest.builder()
@@ -84,7 +103,8 @@ class BoardRestControllerTest {
         boardService.addBoard(boardSaveRequest2.toEntity(), savedMember);
 
         // expected
-        mockMvc.perform(get("/board/boards"))
+        mockMvc.perform(get("/api/board/boards")
+                .header(AUTHORIZATION, jwtAccessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size").value(2))
                 .andExpect(jsonPath("$.list.length()").value(2))
@@ -104,7 +124,8 @@ class BoardRestControllerTest {
         // given
 
         // expected
-        mockMvc.perform(get("/board/boards"))
+        mockMvc.perform(get("/api/board/boards")
+                .header(AUTHORIZATION, jwtAccessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size").value(0))
                 .andExpect(jsonPath("$.list.length()").value(0))
@@ -124,7 +145,8 @@ class BoardRestControllerTest {
         boardService.addBoard(boardSaveRequest.toEntity(), savedMember);
 
         // expected
-        mockMvc.perform(get("/board/{id}", 1))
+        mockMvc.perform(get("/api/board/{id}", 1)
+                .header(AUTHORIZATION, jwtAccessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.id").value(1))
                 .andExpect(jsonPath("$.data.title").value("글 제목1"))
@@ -140,7 +162,8 @@ class BoardRestControllerTest {
         Long id = -1L;
 
         // expected
-        mockMvc.perform(get("/board/{id}", id))
+        mockMvc.perform(get("/api/board/{id}", id)
+                .header(AUTHORIZATION, jwtAccessToken))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errorCode").value(String.valueOf(NOT_FOUND.value())))
                 .andExpect(jsonPath("$.errorMessage").value(messageSource.getMessage("error.noBoard", null, Locale.getDefault())))
@@ -162,12 +185,12 @@ class BoardRestControllerTest {
         boardService.addBoard(boardSaveRequest.toEntity(), savedMember);
 
         // expected
-        mockMvc.perform(delete("/board/{id}", id)
-                .with(csrf().asHeader()))
+        mockMvc.perform(delete("/api/board/{id}", id)
+                .header(AUTHORIZATION, jwtAccessToken))
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        mockMvc.perform(get("/board/{id}", id))
+        mockMvc.perform(get("/api/board/{id}", id))
                 .andDo(print());
     }
 
@@ -183,10 +206,10 @@ class BoardRestControllerTest {
                 .build();
 
         // expected
-        mockMvc.perform(post("/board")
+        mockMvc.perform(post("/api/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardSaveRequest))
-                .with(csrf().asHeader()))
+                .header(AUTHORIZATION, jwtAccessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").value(1L))
                 .andDo(print());
@@ -203,10 +226,10 @@ class BoardRestControllerTest {
                 .build();
 
         // expected
-        mockMvc.perform(post("/board")
+        mockMvc.perform(post("/api/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardSaveRequest))
-                .with(csrf().asHeader()))
+                .header(AUTHORIZATION, jwtAccessToken))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorCode").value(String.valueOf(BAD_REQUEST.value())))
                 .andExpect(jsonPath("$.fieldErrors.[0].field").value("title"))
@@ -225,10 +248,10 @@ class BoardRestControllerTest {
                 .build();
 
         // expected
-        mockMvc.perform(post("/board")
+        mockMvc.perform(post("/api/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardSaveRequest))
-                .with(csrf().asHeader()))
+                .header(AUTHORIZATION, jwtAccessToken))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorCode").value(String.valueOf(BAD_REQUEST.value())))
                 .andExpect(jsonPath("$.fieldErrors.[0].field").value("content"))
@@ -255,15 +278,16 @@ class BoardRestControllerTest {
                 .build();
 
         // expected
-        mockMvc.perform(put("/board")
+        mockMvc.perform(put("/api/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardUpdateRequest))
-                .with(csrf().asHeader()))
+                .header(AUTHORIZATION, jwtAccessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data").value(saveId))
                 .andDo(print());
 
-        mockMvc.perform(get("/board/{id}", saveId))
+        mockMvc.perform(get("/api/board/{id}", saveId)
+                .header(AUTHORIZATION, jwtAccessToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.id").value(saveId))
                 .andExpect(jsonPath("$.data.title").value("수정한 글 제목1"))
@@ -289,10 +313,10 @@ class BoardRestControllerTest {
                 .build();
 
         // expected
-        mockMvc.perform(put("/board")
+        mockMvc.perform(put("/api/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardUpdateRequest))
-                .with(csrf().asHeader()))
+                .header(AUTHORIZATION, jwtAccessToken))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorCode").value(String.valueOf(BAD_REQUEST.value())))
                 .andExpect(jsonPath("$.fieldErrors.[0].field").value("title"))
@@ -318,16 +342,14 @@ class BoardRestControllerTest {
                 .build();
 
         // expected
-        mockMvc.perform(put("/board")
+        mockMvc.perform(put("/api/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardUpdateRequest))
-                .with(csrf().asHeader()))
+                .header(AUTHORIZATION, jwtAccessToken))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorCode").value(String.valueOf(BAD_REQUEST.value())))
                 .andExpect(jsonPath("$.fieldErrors.[0].field").value("content"))
                 .andExpect(jsonPath("$.fieldErrors.[0].message").value(messageSource.getMessage("field.required.content", null, Locale.getDefault())))
                 .andDo(print());
     }
-
-
 }

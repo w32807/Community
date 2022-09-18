@@ -3,6 +3,7 @@ package com.jwj.community.domain.refreshToken.service;
 import com.jwj.community.domain.entity.Member;
 import com.jwj.community.domain.entity.RefreshToken;
 import com.jwj.community.domain.member.service.MemberService;
+import com.jwj.community.web.code.jwt.JwtTokenFactory;
 import com.jwj.community.web.login.request.MemberSaveRequest;
 import com.jwj.community.web.login.request.RefreshTokenRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.jwj.community.web.code.jwt.JwtTokenFactory.getJwtToken;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -26,6 +26,9 @@ class RefreshTokenServiceTest {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private JwtTokenFactory jwtTokenFactory;
 
     private Member member;
 
@@ -47,7 +50,7 @@ class RefreshTokenServiceTest {
     void test1() throws Exception{
         // given
         RefreshTokenRequest request = RefreshTokenRequest.builder()
-                .refreshToken(getJwtToken().getRefreshToken())
+                .refreshToken(jwtTokenFactory.getJwtToken().getRefreshToken())
                 .build();
         // when
         Long savedId = refreshTokenService.createRefreshToken(request.toEntity(), member);
@@ -61,7 +64,7 @@ class RefreshTokenServiceTest {
     void test2() throws Exception{
         // given
         RefreshTokenRequest request = RefreshTokenRequest.builder()
-                .refreshToken(getJwtToken().getRefreshToken())
+                .refreshToken(jwtTokenFactory.getJwtToken().getRefreshToken())
                 .build();
         // when
         refreshTokenService.createRefreshToken(request.toEntity(), member);

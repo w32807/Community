@@ -3,13 +3,12 @@ package com.jwj.community.config.security.utils;
 import com.jwj.community.domain.common.enums.Roles;
 import com.jwj.community.domain.entity.Member;
 import com.jwj.community.web.login.jwt.JwtToken;
-import com.jwj.community.web.login.jwt.JwtTokenType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.impl.DefaultClaims;
 import io.jsonwebtoken.impl.DefaultHeader;
-import io.jsonwebtoken.io.Encoders;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -19,9 +18,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-import static com.jwj.community.web.login.jwt.JwtTokenType.ACCESS;
-import static com.jwj.community.web.login.jwt.JwtTokenType.REFRESH;
 import static io.jsonwebtoken.SignatureAlgorithm.HS256;
+import static io.jsonwebtoken.io.Encoders.BASE64;
 import static io.jsonwebtoken.security.Keys.hmacShaKeyFor;
 import static java.lang.System.currentTimeMillis;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -31,7 +29,9 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 @Component
 public class JwtTokenUtil {
 
-    private final String SECRET = Encoders.BASE64.encode("47edd4a2-8555-4078-9b53-b652e11fc5dd".getBytes());
+    @Value("${jwt.secretKey}")
+    private String SECRET_KEY;
+    private final long DEFAULT_EXP_TIME = currentTimeMillis();
     private final long AT_EXP_TIME = 60 * 60 * 24 * 7;
     private final long RT_EXP_TIME = 60 * 60 * 24 * 30 * 3;
 
@@ -42,8 +42,8 @@ public class JwtTokenUtil {
      */
     public JwtToken generateToken(Member member){
         return JwtToken.builder()
-                .accessToken(doGenerateToken(member, ACCESS))
-                .refreshToken(doGenerateToken(member, REFRESH))
+                .accessToken(doGenerateAccessToken(member))
+                .refreshToken(doGenerateRefreshToken(member))
                 .build();
     }
 
@@ -89,12 +89,23 @@ public class JwtTokenUtil {
         return(username.equals(userDetails.getUsername()) && !isExpiredToken(token));
     }
 
-    private String doGenerateToken(Member member, JwtTokenType jwtTokenType) {
-        if(member == null || isEmpty(member.getEmail())){
-            return null;
-        }
+    /**
+     * 토큰 만료 체크
+     * @param token
+     * @return
+     */
+    public Boolean isExpiredToken(String token){
+        final Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
+    }
 
-        if(jwtTokenType == null){
+    /**
+     * AccessToken은 사용자 정보를 담는다.
+     * @param member
+     * @return
+     */
+    private String doGenerateAccessToken(Member member) {
+        if(member == null || isEmpty(member.getEmail())){
             return null;
         }
 
@@ -105,11 +116,29 @@ public class JwtTokenUtil {
                 // 토큰 제목??
                 .setSubject(member.getEmail())
                 // 토큰이 발급 된 시간
-                .setIssuedAt(new Date(currentTimeMillis()))
+                .setIssuedAt(new Date(DEFAULT_EXP_TIME))
                 // 토큰이 만료될 시간
-                .setExpiration(new Date(currentTimeMillis() + getExpTimeByJwtType(jwtTokenType)))
+                .setExpiration(new Date(DEFAULT_EXP_TIME + AT_EXP_TIME))
                 // 서명
-                .signWith(hmacShaKeyFor(SECRET.getBytes(UTF_8)), HS256)
+                .signWith(hmacShaKeyFor(encodedSecretKey(SECRET_KEY).getBytes(UTF_8)), HS256)
+                .compact();
+    }
+
+    /**
+     * RefreshToken은 만료시간 정보만 담는다.
+     * @param member
+     * @return
+     */
+    private String doGenerateRefreshToken(Member member) {
+        if(member == null || isEmpty(member.getEmail())){
+            return null;
+        }
+
+        return Jwts.builder()
+                // 토큰이 만료될 시간
+                .setExpiration(new Date(DEFAULT_EXP_TIME + RT_EXP_TIME))
+                // 서명
+                .signWith(hmacShaKeyFor(encodedSecretKey(SECRET_KEY).getBytes(UTF_8)), HS256)
                 .compact();
     }
 
@@ -119,17 +148,7 @@ public class JwtTokenUtil {
      * @return
      */
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(SECRET.getBytes()).build().parseClaimsJws(token).getBody();
-    }
-
-    /**
-     * 토큰 만료 체크
-     * @param token
-     * @return
-     */
-    private Boolean isExpiredToken(String token){
-        final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(new Date());
+        return Jwts.parserBuilder().setSigningKey(encodedSecretKey(SECRET_KEY).getBytes()).build().parseClaimsJws(token).getBody();
     }
 
     private Map<String, Object> getDefaultHeader(){
@@ -152,7 +171,8 @@ public class JwtTokenUtil {
         return claimsResolver.apply(claims);
     }
 
-    private long getExpTimeByJwtType(JwtTokenType jwtTokenType){
-        return jwtTokenType == ACCESS ? AT_EXP_TIME : RT_EXP_TIME;
+    private String encodedSecretKey(String secretKey){
+        return BASE64.encode(SECRET_KEY.getBytes());
     }
+
 }

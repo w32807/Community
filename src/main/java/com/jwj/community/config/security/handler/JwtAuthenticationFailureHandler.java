@@ -17,7 +17,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-public class AjaxAuthenticationFailureHandler implements AuthenticationFailureHandler {
+public class JwtAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
