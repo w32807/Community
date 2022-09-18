@@ -5,7 +5,7 @@ import com.jwj.community.config.security.utils.JwtTokenUtil;
 import com.jwj.community.domain.entity.Member;
 import com.jwj.community.domain.refreshToken.service.RefreshTokenService;
 import com.jwj.community.web.login.jwt.JwtToken;
-import com.jwj.community.web.login.request.RefreshTokenRequest;
+import com.jwj.community.web.refreshToken.dto.request.RefreshTokenRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;

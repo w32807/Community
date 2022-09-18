@@ -5,7 +5,7 @@ import com.jwj.community.domain.entity.RefreshToken;
 import com.jwj.community.domain.member.service.MemberService;
 import com.jwj.community.web.code.jwt.JwtTokenFactory;
 import com.jwj.community.web.login.request.MemberSaveRequest;
-import com.jwj.community.web.login.request.RefreshTokenRequest;
+import com.jwj.community.web.refreshToken.dto.request.RefreshTokenRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,7 +47,7 @@ class RefreshTokenServiceTest {
 
     @Test
     @DisplayName("RefreshToken 생성")
-    void test1() throws Exception{
+    void test1() {
         // given
         RefreshTokenRequest request = RefreshTokenRequest.builder()
                 .refreshToken(jwtTokenFactory.getJwtToken().getRefreshToken())
@@ -61,7 +61,7 @@ class RefreshTokenServiceTest {
 
     @Test
     @DisplayName("RefreshToken 회원으로 조회하기")
-    void test2() throws Exception{
+    void test2(){
         // given
         RefreshTokenRequest request = RefreshTokenRequest.builder()
                 .refreshToken(jwtTokenFactory.getJwtToken().getRefreshToken())

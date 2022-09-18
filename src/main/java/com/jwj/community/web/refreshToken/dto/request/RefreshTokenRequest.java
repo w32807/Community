@@ -1,4 +1,4 @@
-package com.jwj.community.web.login.request;
+package com.jwj.community.web.refreshToken.dto.request;
 
 import com.jwj.community.domain.entity.RefreshToken;
 import lombok.Builder;

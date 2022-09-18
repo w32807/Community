@@ -9,7 +9,7 @@ import com.jwj.community.web.board.dto.request.BoardSaveRequest;
 import com.jwj.community.web.board.dto.request.BoardUpdateRequest;
 import com.jwj.community.web.code.jwt.JwtTokenFactory;
 import com.jwj.community.web.login.request.MemberSaveRequest;
-import com.jwj.community.web.login.request.RefreshTokenRequest;
+import com.jwj.community.web.refreshToken.dto.request.RefreshTokenRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

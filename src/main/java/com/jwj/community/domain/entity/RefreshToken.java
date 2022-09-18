@@ -1,6 +1,6 @@
 package com.jwj.community.domain.entity;
 
-import com.jwj.community.web.login.request.RefreshTokenRequest;
+import com.jwj.community.web.refreshToken.dto.request.RefreshTokenRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
