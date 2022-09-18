@@ -86,7 +86,7 @@ class JwtAuthenticationFilterTest {
     @DisplayName("Jwt 토큰이 만료되었을 때")
     public void test3() throws Exception{
         // given
-        JwtToken jwtToken = jwtTokenFactory.getRequestExpiredJwtToken();
+        JwtToken jwtToken = jwtTokenFactory.getExpiredRequestJwtToken();
         // expected
         mockMvc.perform(get("/api/board/boards")
                 .contentType(APPLICATION_JSON)
