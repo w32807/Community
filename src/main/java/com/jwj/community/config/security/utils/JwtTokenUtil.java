@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
+import static com.jwj.community.web.login.jwt.JwtConst.TOKEN_HEADER_PREFIX;
 import static io.jsonwebtoken.SignatureAlgorithm.HS256;
 import static io.jsonwebtoken.io.Encoders.BASE64;
 import static io.jsonwebtoken.security.Keys.hmacShaKeyFor;
@@ -37,8 +38,6 @@ public class JwtTokenUtil {
 
     /**
      * username 으로 토큰생성
-     * @param member
-     * @return
      */
     public JwtToken generateToken(Member member){
         return JwtToken.builder()
@@ -49,8 +48,6 @@ public class JwtTokenUtil {
 
     /**
      * jwt 토큰에서 username 조회
-     * @param token
-     * @return
      */
     public String getUsernameFromToken(String token){
         return getClaimFromToken(token, Claims::getSubject);
@@ -60,8 +57,6 @@ public class JwtTokenUtil {
      * jwt 토큰에서 권한조회 검색
      * 토큰을 다시 claims로 변환하면 String 값으로 변환되기 때문에
      * 다시 Set으로 만들어주어야 한다.
-     * @param token
-     * @return
      */
     public Set<Roles> getRolesFromToken(String token){
         Claims claims = getAllClaimsFromToken(token);
@@ -71,8 +66,6 @@ public class JwtTokenUtil {
 
     /**
      * jwt 토큰에서 날짜 만료 검색
-     * @param token
-     * @return
      */
     public Date getExpirationDateFromToken(String token){
         return getClaimFromToken(token, Claims::getExpiration);
@@ -80,9 +73,6 @@ public class JwtTokenUtil {
 
     /**
      * 토큰 검증
-     * @param token
-     * @param userDetails
-     * @return
      */
     public Boolean isValidToken(String token, UserDetails userDetails){
         final String username = getUsernameFromToken(token);
@@ -91,18 +81,21 @@ public class JwtTokenUtil {
 
     /**
      * 토큰 만료 체크
-     * @param token
-     * @return
      */
     public Boolean isExpiredToken(String token){
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
 
+    public String removePrefix(String token){
+        if(token.startsWith(TOKEN_HEADER_PREFIX)){
+            token = token.substring(TOKEN_HEADER_PREFIX.length() + 1);
+        }
+        return token;
+    }
+
     /**
      * AccessToken은 사용자 정보를 담는다.
-     * @param member
-     * @return
      */
     private String doGenerateAccessToken(Member member) {
         if(member == null || isEmpty(member.getEmail())){
@@ -126,8 +119,6 @@ public class JwtTokenUtil {
 
     /**
      * RefreshToken은 만료시간 정보만 담는다.
-     * @param member
-     * @return
      */
     private String doGenerateRefreshToken(Member member) {
         if(member == null || isEmpty(member.getEmail())){
@@ -135,6 +126,7 @@ public class JwtTokenUtil {
         }
 
         return Jwts.builder()
+                .setSubject(member.getEmail())
                 // 토큰이 만료될 시간
                 .setExpiration(new Date(DEFAULT_EXP_TIME + RT_EXP_TIME))
                 // 서명
@@ -144,10 +136,9 @@ public class JwtTokenUtil {
 
     /**
      * secret 키를 가지고 토큰에서 정보 검색
-     * @param token
-     * @return
      */
     private Claims getAllClaimsFromToken(String token) {
+        token = removePrefix(token);
         return Jwts.parserBuilder().setSigningKey(encodedSecretKey(SECRET_KEY).getBytes()).build().parseClaimsJws(token).getBody();
     }
 
