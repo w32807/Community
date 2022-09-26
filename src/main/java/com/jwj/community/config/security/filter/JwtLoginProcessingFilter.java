@@ -26,7 +26,6 @@ public class JwtLoginProcessingFilter extends AbstractAuthenticationProcessingFi
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
         // 입력받은 로그인 정보 확인
         MemberSaveRequest memberSaveRequest = objectMapper.readValue(request.getReader(), MemberSaveRequest.class);
 
