@@ -60,8 +60,6 @@ public class JwtSecurityConfig {
 
         http.csrf().disable();
 
-        http.cors();
-
         http.addFilterBefore(jwtLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

@@ -8,9 +8,27 @@ const password = ref("")
 
 const login = function (){
     // 타겟 지정없이 v-model로 바로 접근 가능하다.
-    console.log(email.value)
-    console.log(password.value)
-    axios.get('http://localhost:8080/api')
+    console.log(email.value);
+    console.log(password.value);
+    axios.post('/api/login',{
+        //email: email.value,
+        //password: password.value
+        email: 'admin1@google.com',
+        password: '1234'
+    })
+    .then(function(response){
+        console.log("정상응답");
+        console.log(response);
+        console.log(response.data.accessToken);
+        console.log(response.data.refreshToken);
+        console.log(localStorage);
+        localStorage.setItem('accessToken', response.data.accessToken);
+        localStorage.setItem('refreshToken', response.data.refreshToken);
+    })
+    .catch(function(error){
+       console.log("로그인 실패");
+       console.log(error);
+    });
 }
 
 </script>
