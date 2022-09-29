@@ -2,13 +2,19 @@
 import {ref} from "vue";
 import axios from "axios";
 
-const title = ref("")
-const content = ref("")
+const title = ref("");
+const content = ref("");
+
+const = router = useRouter();
 
 const write = function (){
     console.log(title.value)
     console.log(content.value)
     axios.get('http://google.com')
+    .then(() => {
+        // 글 작성 완료 후 화면 이동하는 방법
+      router.replace({name: "home"});
+    })
 
 }
 
