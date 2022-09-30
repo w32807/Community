@@ -4,9 +4,10 @@
 
 <template>
     <el-scrollbar>
-        <el-menu>
+        <!-- https://element-plus.org/en-US/component/menu.html#submenu-slots 속성들 참고하기 -->
+        <el-menu :router=true>
             <el-menu-item-group>
-                <el-menu-item>
+                <el-menu-item index='/'>
                     <!--
                         RouterLink를 쓰지않고 프로그래밍 방법으로 라우터를 사용한다.
                         https://v3.router.vuejs.org/kr/guide/essentials/navigation.html
@@ -15,13 +16,13 @@
                 </el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group>
-                <el-menu-item>
-                    <el-link :underline="false" @click="$router.push({ path: '/write' })">글작성</el-link>
+                <el-menu-item index='/write'>
+                    <el-link :underline="false">글작성</el-link>
                 </el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group>
-                <el-menu-item>
-                    <el-link :underline="false" @click="$router.push({ path: '/login' })">로그인</el-link>
+                <el-menu-item index='/login'>
+                    <el-link :underline="false">로그인</el-link>
                 </el-menu-item>
             </el-menu-item-group>
         </el-menu>
