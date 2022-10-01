@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import {ref} from "vue";
-import axios from "axios";
+import axios from "../config/axiosConfig.ts";
 
 // ref란 vue에서 컴포넌트 또는 DOM에 접근하기 위해 사용하는 속성이다.
 const email = ref("")
 const password = ref("")
 
 const login = function (){
-    // 타겟 지정없이 v-model로 바로 접근 가능하다.
-    console.log(email.value);
-    console.log(password.value);
-    axios.post('/api/login',{
+
+    axios.post('/login',{
         //email: email.value,
         //password: password.value
         email: 'admin1@google.com',
@@ -29,6 +27,33 @@ const login = function (){
        console.log("로그인 실패");
        console.log(error);
     });
+
+
+/*
+    // 타겟 지정없이 v-model로 바로 접근 가능하다.
+    console.log(email.value);
+    console.log(password.value);
+    axios.post('/login',{
+        //email: email.value,
+        //password: password.value
+        email: 'admin1@google.com',
+        password: '1234'
+    })
+    .then(function(response){
+        console.log("정상응답");
+        console.log(response);
+        console.log(response.data.accessToken);
+        console.log(response.data.refreshToken);
+        console.log(localStorage);
+        localStorage.setItem('accessToken', response.data.accessToken);
+        localStorage.setItem('refreshToken', response.data.refreshToken);
+
+        Axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.accessToken}`
+    })
+    .catch(function(error){
+       console.log("로그인 실패");
+       console.log(error);
+    });*/
 }
 
 </script>
