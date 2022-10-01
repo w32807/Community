@@ -20,11 +20,6 @@
                     <el-link :underline="false">글작성</el-link>
                 </el-menu-item>
             </el-menu-item-group>
-            <el-menu-item-group>
-                <el-menu-item index='/login'>
-                    <el-link :underline="false">로그인</el-link>
-                </el-menu-item>
-            </el-menu-item-group>
         </el-menu>
     </el-scrollbar>
 </template>
