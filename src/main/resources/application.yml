@@ -73,3 +73,4 @@ server:
 file.common.dir: C:\\upload\common\
 file.image.dir: C:\\upload\image\
 file.excel.dir: C:\\upload\excel\
+jwt.secretKey: "47edd4a2-8555-4078-9b53-b652e11fc5dd"

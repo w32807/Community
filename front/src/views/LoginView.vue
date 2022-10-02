@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import {ref} from "vue";
+import {useRouter} from "vue-router";
 import axios from "../config/axiosConfig.ts";
 
 // ref란 vue에서 컴포넌트 또는 DOM에 접근하기 위해 사용하는 속성이다.
-const email = ref("")
-const password = ref("")
+const email = ref("");
+const password = ref("");
+const router = useRouter();
 
 const login = function (){
 
@@ -15,17 +17,12 @@ const login = function (){
         password: '1234'
     })
     .then(function(response){
-        console.log("정상응답");
-        console.log(response);
-        console.log(response.data.accessToken);
-        console.log(response.data.refreshToken);
-        console.log(localStorage);
         localStorage.setItem('accessToken', response.data.accessToken);
         localStorage.setItem('refreshToken', response.data.refreshToken);
+        // vue-router에서 useRouter를 import 후 화면이동하기.
+        router.push({name: "home"});
     })
     .catch(function(error){
-       console.log("로그인 실패");
-       console.log(error);
     });
 
 
