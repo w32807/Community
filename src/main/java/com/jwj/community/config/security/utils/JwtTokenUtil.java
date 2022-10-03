@@ -33,8 +33,8 @@ public class JwtTokenUtil {
     @Value("${jwt.secretKey}")
     private String SECRET_KEY;
     private final long DEFAULT_EXP_TIME = currentTimeMillis();
-    private final long AT_EXP_TIME = 60 * 60 * 24 * 7;
-    private final long RT_EXP_TIME = 60 * 60 * 24 * 30 * 3;
+    private final long AT_EXP_TIME = 60 * 60 * 24 * 7 * 1000; // 밀리초라서 1000을 곱해줘야 함
+    private final long RT_EXP_TIME = 60 * 60 * 24 * 30 * 3 * 1000;
 
     /**
      * username 으로 토큰생성
@@ -101,7 +101,7 @@ public class JwtTokenUtil {
         if(member == null || isEmpty(member.getEmail())){
             return null;
         }
-
+        System.out.println(new Date(DEFAULT_EXP_TIME + AT_EXP_TIME));
         return Jwts.builder()
                 .setHeader(getDefaultHeader())
                 // payload로써 토큰에 담을 정보들
