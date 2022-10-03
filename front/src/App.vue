@@ -24,13 +24,16 @@ import FooterView from "./views/layout/FooterView.vue";
             <el-main>
                 <RouterView/> <!-- 라우터를 통해 가져온 View.vue의 내용을 보여줄 영역 -->
             </el-main>
-            <el-footer>
-                <FooterView/>
-            </el-footer>
         </el-container>
     </el-container>
 </template>
 
 <style>
-
+body {
+    margin: 0;
+}
+#app .layout-container {
+    width : 100vw;
+    height : 100vh;
+}
 </style>
