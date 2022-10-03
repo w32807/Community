@@ -3,7 +3,6 @@
 import { RouterLink, RouterView } from "vue-router";
 import AsideView from "./views/layout/AsideView.vue";
 import HeaderView from "./views/layout/HeaderView.vue";
-import FooterView from "./views/layout/FooterView.vue";
 
 // 다른 vue 파일을 import 하는 법
 // import HeaderView from "./views/layout/HeaderView.vue"; 로 import
