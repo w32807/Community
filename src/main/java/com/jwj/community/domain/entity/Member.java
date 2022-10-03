@@ -7,6 +7,7 @@ import com.jwj.community.utils.ModelMapperUtils;
 import com.jwj.community.web.login.request.MemberSaveRequest;
 import com.jwj.community.web.login.response.MemberResponse;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -46,6 +47,11 @@ public class Member extends BaseEntity {
         this.email = request.getEmail();
         this.password = request.getPassword();
         this.nickname = request.getNickname();
+    }
+
+    @Builder(builderClassName = "LoginMember", builderMethodName = "LoginMember")
+    public Member(Long id) {
+        this.id = id;
     }
 
     @ElementCollection(fetch = FetchType.EAGER) // Enum의 컬렉션 객체임을 알려주는 Annotation

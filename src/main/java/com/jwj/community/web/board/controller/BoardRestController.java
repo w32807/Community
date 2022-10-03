@@ -2,11 +2,13 @@ package com.jwj.community.web.board.controller;
 
 import com.jwj.community.domain.board.service.BoardService;
 import com.jwj.community.domain.member.service.MemberService;
+import com.jwj.community.web.annotation.LoginMember;
 import com.jwj.community.web.board.dto.request.BoardSaveRequest;
 import com.jwj.community.web.board.dto.request.BoardUpdateRequest;
 import com.jwj.community.web.board.dto.response.BoardResponse;
 import com.jwj.community.web.common.result.ListResult;
 import com.jwj.community.web.common.result.Result;
+import com.jwj.community.web.login.dto.LoginMemberDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,16 +51,16 @@ public class BoardRestController {
         return new ResponseEntity<>(result, OK);
     }
 
-    @PostMapping
-    public ResponseEntity<Result> addBoard(@RequestBody @Valid BoardSaveRequest request){
+    @PostMapping("/board")
+    public ResponseEntity<Result> addBoard(@RequestBody @Valid BoardSaveRequest request, @LoginMember LoginMemberDTO loginMember){
         Result<Long> result = Result.<Long>builder()
-                .data(boardService.addBoard(request.toEntity(), memberService.findByEmail(request.getEmail())))
+                .data(boardService.addBoard(request.toEntity(), memberService.findByEmail(loginMember.getEmail())))
                 .build();
 
         return new ResponseEntity<>(result, OK);
     }
 
-    @PutMapping
+    @PutMapping("/board")
     public ResponseEntity<Result> updateBoard(@RequestBody @Valid BoardUpdateRequest request){
         Result<Long> result = Result.<Long>builder()
                 .data(boardService.updateBoard(request.toEntity()))

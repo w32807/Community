@@ -20,9 +20,6 @@ public class BoardSaveRequest {
     @NotBlank(message = "{field.required.content}")
     private String content;
 
-    @NotBlank
-    private String email;
-
     public Board toEntity(){
         return Board.create()
                 .title(this.title)
