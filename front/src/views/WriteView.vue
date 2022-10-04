@@ -1,21 +1,22 @@
 <script setup lang="ts">
 import {ref} from "vue";
-import axios from "axios";
+import axios from "../config/axios-config";
 
 const title = ref("");
 const content = ref("");
 
-const = router = useRouter();
-
 const write = function (){
-    console.log(title.value)
-    console.log(content.value)
-    axios.get('http://google.com')
+    axios.post('/board/board',{
+        title: title.value,
+        content: content.value
+    })
     .then(() => {
         // 글 작성 완료 후 화면 이동하는 방법
       router.replace({name: "home"});
     })
-
+    .catch(error => {
+        console.log(error)
+    })
 }
 
 </script>

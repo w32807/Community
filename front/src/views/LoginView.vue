@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {ref} from "vue";
 import {useRouter} from "vue-router";
-import axios from "../config/axiosConfig.ts";
+import axios from "../config/axios-config";
 
 // ref란 vue에서 컴포넌트 또는 DOM에 접근하기 위해 사용하는 속성이다.
 const email = ref("");

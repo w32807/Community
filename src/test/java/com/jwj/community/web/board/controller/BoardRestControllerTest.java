@@ -200,7 +200,6 @@ class BoardRestControllerTest {
         BoardSaveRequest boardSaveRequest = BoardSaveRequest.builder()
                 .title("글 제목1")
                 .content("글 내용1")
-                .email(saveMemberEmail)
                 .build();
 
         // expected
@@ -220,7 +219,6 @@ class BoardRestControllerTest {
         // given
         BoardSaveRequest boardSaveRequest = BoardSaveRequest.builder()
                 .content("글 내용1")
-                .email(saveMemberEmail)
                 .build();
 
         // expected
@@ -242,7 +240,6 @@ class BoardRestControllerTest {
         // given
         BoardSaveRequest boardSaveRequest = BoardSaveRequest.builder()
                 .title("글 제목1")
-                .email(saveMemberEmail)
                 .build();
 
         // expected

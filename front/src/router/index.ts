@@ -20,8 +20,8 @@ const router = createRouter({
       path: "/login",
       name: "login",
       component: LoginView,
-    },
+    }
   ],
 });
 
-export default router;
+export { router as default };
