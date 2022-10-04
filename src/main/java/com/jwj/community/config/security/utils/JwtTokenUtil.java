@@ -101,7 +101,7 @@ public class JwtTokenUtil {
         if(member == null || isEmpty(member.getEmail())){
             return null;
         }
-        System.out.println(new Date(DEFAULT_EXP_TIME + AT_EXP_TIME));
+
         return Jwts.builder()
                 .setHeader(getDefaultHeader())
                 // payload로써 토큰에 담을 정보들
