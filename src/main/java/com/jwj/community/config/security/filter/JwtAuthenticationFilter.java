@@ -5,6 +5,7 @@ import com.jwj.community.config.security.config.LoginContext;
 import com.jwj.community.config.security.token.JwtAuthenticationToken;
 import com.jwj.community.config.security.utils.JwtTokenUtil;
 import com.jwj.community.web.exception.dto.ErrorResult;
+import com.jwj.community.web.exception.exceptions.jwt.AccessTokenNotFound;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }else{
             try{
                 // 토큰에서 username을 얻어와서 SecurityContextHolder에 저장 ("bearer 6자리와 띄어쓰기 1자리를 포함하여 자른다)
-                String accessToken = jwtTokenUtil.removePrefix(authorizationHeader);
+                String accessToken = authorizationHeader;
 
                 if(!jwtTokenUtil.isExpiredToken(accessToken)){
                     LoginContext loginContext = (LoginContext) userDetailsService.loadUserByUsername(jwtTokenUtil.getUsernameFromToken(accessToken));
@@ -67,9 +68,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     filterChain.doFilter(request, response);
                 }
             }catch(ExpiredJwtException e){
-                handleExpiredJwtException(response);
+                handleExpiredJwtException(response, e);
             }catch(SignatureException e){
-                handleSignatureException(response);
+                handleSignatureException(response, e);
             }
         }
     }
@@ -84,22 +85,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 && !"null".equals(authorizationHeader);
     }
 
-    private void handleExpiredJwtException(HttpServletResponse response) throws IOException {
+    private void handleExpiredJwtException(HttpServletResponse response, ExpiredJwtException e) throws IOException {
         String errorMessage = messageSource.getMessage("error.expiredJwtToken", null, getDefault());
-        setErrorResponse(response, errorMessage);
+        setErrorResponse(response, errorMessage, e);
     }
 
-    private void handleSignatureException(HttpServletResponse response) throws IOException {
+    private void handleSignatureException(HttpServletResponse response, SignatureException e) throws IOException {
         String errorMessage = messageSource.getMessage("error.invalidJwtSignature", null, getDefault());
-        setErrorResponse(response, errorMessage);
+        setErrorResponse(response, errorMessage, e);
     }
 
     private void handleInvalidToken(HttpServletResponse response) throws IOException {
         String errorMessage = messageSource.getMessage("error.noJwtToken", null, getDefault());
-        setErrorResponse(response, errorMessage);
+        setErrorResponse(response, errorMessage, new AccessTokenNotFound());
     }
 
-    private void setErrorResponse(HttpServletResponse response, String errorMessage) throws IOException {
+    private void setErrorResponse(HttpServletResponse response, String errorMessage, Exception ex) throws IOException {
         log.error(errorMessage);
 
         response.setStatus(UNAUTHORIZED.value());
@@ -109,6 +110,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         ErrorResult errorResult = ErrorResult.builder()
                 .errorCode(String.valueOf(UNAUTHORIZED.value()))
                 .errorMessage(errorMessage)
+                .exception(ex)
                 .build();
 
         new ObjectMapper().writeValue(response.getWriter(), errorResult);

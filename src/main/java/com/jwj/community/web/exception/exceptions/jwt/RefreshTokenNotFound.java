@@ -1,4 +1,4 @@
-package com.jwj.community.web.exception.exceptions.refreshToken;
+package com.jwj.community.web.exception.exceptions.jwt;
 
 import com.jwj.community.web.exception.exceptions.common.CommunityException;
 

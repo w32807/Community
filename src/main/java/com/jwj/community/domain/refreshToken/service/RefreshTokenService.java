@@ -4,7 +4,7 @@ import com.jwj.community.domain.entity.Member;
 import com.jwj.community.domain.entity.RefreshToken;
 import com.jwj.community.domain.member.repository.MemberRepository;
 import com.jwj.community.domain.refreshToken.repository.RefreshTokenRepository;
-import com.jwj.community.web.exception.exceptions.refreshToken.RefreshTokenNotFound;
+import com.jwj.community.web.exception.exceptions.jwt.RefreshTokenNotFound;
 import com.jwj.community.web.login.jwt.JwtToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;

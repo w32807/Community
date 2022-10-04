@@ -28,6 +28,7 @@ public class CommonRestControllerAdvice {
         ErrorResult errorResult = ErrorResult.builder()
                 .errorCode(ex.getStatusCode())
                 .errorMessage(ex.getMessage())
+                .exception(ex)
                 .build();
 
         return new ResponseEntity<>(errorResult, HttpStatus.valueOf(parseInt(ex.getStatusCode())));
@@ -48,6 +49,7 @@ public class CommonRestControllerAdvice {
         ErrorResult errorResult = ErrorResult.builder()
                 .errorCode(String.valueOf(UNAUTHORIZED.value()))
                 .errorMessage(messageSource.getMessage("error.expiredJwtToken", null, getDefault()))
+                .exception(ex)
                 .build();
 
         return new ResponseEntity<>(errorResult, UNAUTHORIZED);

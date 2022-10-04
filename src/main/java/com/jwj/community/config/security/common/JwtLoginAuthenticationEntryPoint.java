@@ -26,6 +26,7 @@ public class JwtLoginAuthenticationEntryPoint implements AuthenticationEntryPoin
         ErrorResult errorResult = ErrorResult.builder()
                 .errorCode(String.valueOf(UNAUTHORIZED.value()))
                 .errorMessage("인증되지 않은 사용자입니다.")
+                .exception(authException)
                 .build();
 
         response.setStatus(UNAUTHORIZED.value());
