@@ -9,7 +9,7 @@ import com.jwj.community.web.login.jwt.JwtToken;
 import com.jwj.community.web.refreshToken.dto.request.RefreshTokenRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +25,7 @@ public class RefreshTokenRestController {
     private final RefreshTokenService refreshTokenService;
     private final JwtTokenUtil jwtTokenUtil;
 
-    @GetMapping("/refresh")
+    @PostMapping("/refresh")
     public ResponseEntity<Result<JwtToken>> refresh(@RequestBody RefreshTokenRequest request){
         String email = jwtTokenUtil.getUsernameFromToken(request.getRefreshToken());
         Member savedMember = memberService.findByEmail(email);

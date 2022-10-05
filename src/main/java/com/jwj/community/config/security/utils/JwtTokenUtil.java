@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,8 @@ import static io.jsonwebtoken.io.Encoders.BASE64;
 import static io.jsonwebtoken.security.Keys.hmacShaKeyFor;
 import static java.lang.System.currentTimeMillis;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.time.LocalDateTime.now;
+import static java.time.ZoneId.systemDefault;
 import static java.util.stream.Collectors.toSet;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
@@ -32,9 +35,6 @@ public class JwtTokenUtil {
 
     @Value("${jwt.secretKey}")
     private String SECRET_KEY;
-    private final long DEFAULT_EXP_TIME = currentTimeMillis();
-    private final long AT_EXP_TIME = 60 * 60 * 24 * 7 * 1000; // 밀리초라서 1000을 곱해줘야 함
-    private final long RT_EXP_TIME = 60 * 60 * 24 * 30 * 3 * 1000;
 
     /**
      * username 으로 토큰생성
@@ -109,9 +109,10 @@ public class JwtTokenUtil {
                 // 토큰 제목??
                 .setSubject(member.getEmail())
                 // 토큰이 발급 된 시간
-                .setIssuedAt(new Date(DEFAULT_EXP_TIME))
+                .setIssuedAt(new Date(currentTimeMillis()))
                 // 토큰이 만료될 시간
-                .setExpiration(new Date(DEFAULT_EXP_TIME + AT_EXP_TIME))
+                //.setExpiration(new Date(DEFAULT_EXP_TIME + AT_EXP_TIME))
+                .setExpiration(getAtExpTime())
                 // 서명
                 .signWith(hmacShaKeyFor(encodedSecretKey(SECRET_KEY).getBytes(UTF_8)), HS256)
                 .compact();
@@ -128,7 +129,7 @@ public class JwtTokenUtil {
         return Jwts.builder()
                 .setSubject(member.getEmail())
                 // 토큰이 만료될 시간
-                .setExpiration(new Date(DEFAULT_EXP_TIME + RT_EXP_TIME))
+                .setExpiration(getRtExpTime())
                 // 서명
                 .signWith(hmacShaKeyFor(encodedSecretKey(SECRET_KEY).getBytes(UTF_8)), HS256)
                 .compact();
@@ -164,6 +165,17 @@ public class JwtTokenUtil {
 
     private String encodedSecretKey(String secretKey){
         return BASE64.encode(SECRET_KEY.getBytes());
+    }
+
+    private Date getAtExpTime(){
+        //LocalDateTime atExpTime = LocalDateTime.now().plusDays(7);
+        LocalDateTime atExpTime = now().plusSeconds(10);
+        return Date.from(atExpTime.atZone(systemDefault()).toInstant());
+    }
+
+    private Date getRtExpTime(){
+        LocalDateTime rtExpTime = now().plusMonths(3);
+        return Date.from(rtExpTime.atZone(systemDefault()).toInstant());
     }
 
 }

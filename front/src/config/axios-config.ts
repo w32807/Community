@@ -1,5 +1,7 @@
 import axios from "axios";
 import router from "../router";
+import JwtToken from "../store/models/jwt-token";
+import JwtRefreshService from "../store/services/jwtRefreshService";
 
 /*
     vue3의 ts파일에서 vue router를 사용하기
@@ -35,6 +37,7 @@ instance.interceptors.response.use(
     return response;
   },
   function (error) {
+
     // 200대 이외의 오류 응답을 가공
     if(error.response.data.errorCode === '401'){
         if(error.response.data.exceptionName === 'AccessTokenNotFound'
@@ -44,6 +47,16 @@ instance.interceptors.response.use(
         }
         if(error.response.data.exceptionName === 'ExpiredJwtException'){
             // 토큰이 만료되었을 때 refresh 토큰 발급 요청
+            let jwtRefreshService = new JwtRefreshService();
+            let accessToken: string | null = null;
+            let refreshToken: string | null = null;
+
+            accessToken = localStorage.getItem('accessToken');
+            refreshToken = localStorage.getItem('refreshToken');
+
+            let jwtToken = new JwtToken(accessToken, refreshToken);
+
+            jwtRefreshService.refresh(jwtToken);
         }
     }
     return Promise.reject(error);
