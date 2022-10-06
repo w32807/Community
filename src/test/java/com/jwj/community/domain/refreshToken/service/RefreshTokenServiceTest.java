@@ -53,7 +53,7 @@ class RefreshTokenServiceTest {
                 .refreshToken(jwtTokenFactory.getJwtToken().getRefreshToken())
                 .build();
         // when
-        Long savedId = refreshTokenService.createRefreshToken(request.toEntity(), member);
+        Long savedId = refreshTokenService.createRefreshToken(request.toEntity(), member.getEmail());
         RefreshToken refreshToken = refreshTokenService.getRefreshToken(savedId);
         // then
         assertThat(refreshToken.getToken()).isEqualTo(request.getRefreshToken());
@@ -67,7 +67,7 @@ class RefreshTokenServiceTest {
                 .refreshToken(jwtTokenFactory.getJwtToken().getRefreshToken())
                 .build();
         // when
-        refreshTokenService.createRefreshToken(request.toEntity(), member);
+        refreshTokenService.createRefreshToken(request.toEntity(), member.getEmail());
         RefreshToken refreshToken = refreshTokenService.getRefreshTokenByMember(member);
         // then
         assertThat(refreshToken.getToken()).isEqualTo(request.getRefreshToken());

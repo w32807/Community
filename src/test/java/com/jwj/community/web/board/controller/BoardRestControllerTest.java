@@ -79,7 +79,7 @@ class BoardRestControllerTest {
                 .build();
 
         savedMember = memberService.findById(memberService.createMember(memberSaveRequest.toEntity()));
-        refreshTokenService.createRefreshToken(request.toEntity(), savedMember);
+        refreshTokenService.createRefreshToken(request.toEntity(), savedMember.getEmail());
         accessToken = jwtTokenFactory.getRequestJwtToken().getAccessToken();
     }
 

@@ -22,11 +22,14 @@ public class RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final MessageSource messageSource;
 
-    public Long createRefreshToken(RefreshToken refreshToken, Member member) {
-        refreshToken.setMember(member);
-        member.changeRefreshToken(refreshToken);
+    public Long createRefreshToken(RefreshToken refreshToken, String email) {
+        Member savedMember = memberRepository.findByEmail(email);
+        RefreshToken savedRefreshToken = refreshTokenRepository.save(refreshToken);
 
-        return refreshTokenRepository.save(refreshToken).getId();
+        savedRefreshToken.setMember(savedMember);
+        savedMember.changeRefreshToken(savedRefreshToken);
+
+        return savedRefreshToken.getId();
     }
 
     public RefreshToken changeRefreshToken(String email, JwtToken jwtToken) {
