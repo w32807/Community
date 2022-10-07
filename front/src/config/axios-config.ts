@@ -1,5 +1,5 @@
 import axios from "axios";
-import router from "../router";
+import {useRouter} from "vue-router";
 import JwtToken from "../store/models/jwt-token";
 import JwtRefreshService from "../store/services/jwtRefreshService";
 
@@ -12,6 +12,8 @@ import JwtRefreshService from "../store/services/jwtRefreshService";
 const instance = axios.create({
     baseURL: '/api'
 });
+
+const router = useRouter();
 
 // 요청 인터셉터 추가하기
 instance.interceptors.request.use(
@@ -30,6 +32,7 @@ instance.interceptors.request.use(
         return Promise.reject(error);
     }
 );
+
 // 응답(response) interceptor
 instance.interceptors.response.use(
   function (response) {

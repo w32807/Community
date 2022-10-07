@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import {ref} from "vue";
 import {useRouter} from "vue-router";
+import store from "../store";
 import axios from "../config/axios-config";
+import Member from "../store/models/member";
 
 // ref란 vue에서 컴포넌트 또는 DOM에 접근하기 위해 사용하는 속성이다.
 const email = ref("");
@@ -9,7 +11,6 @@ const password = ref("");
 const router = useRouter();
 
 const login = function (){
-
     axios.post('/login',{
         //email: email.value,
         //password: password.value
@@ -17,40 +18,17 @@ const login = function (){
         password: '1234'
     })
     .then(function(response){
-        localStorage.setItem('accessToken', response.data.accessToken);
-        localStorage.setItem('refreshToken', response.data.refreshToken);
-        // vue-router에서 useRouter를 import 후 화면이동하기.
+        localStorage.setItem('accessToken', response.data.token.accessToken);
+        localStorage.setItem('refreshToken', response.data.token.refreshToken);
+
+        // store에 회원정보 저장하기
+        store.commit('loginSuccess', new Member(response.data.email, response.data.nickName));
+
+        // vue-router에서 useRouter를 import 후 화면이동하기
         router.push({name: "home"});
     })
     .catch(function(error){
     });
-
-
-/*
-    // 타겟 지정없이 v-model로 바로 접근 가능하다.
-    console.log(email.value);
-    console.log(password.value);
-    axios.post('/login',{
-        //email: email.value,
-        //password: password.value
-        email: 'admin1@google.com',
-        password: '1234'
-    })
-    .then(function(response){
-        console.log("정상응답");
-        console.log(response);
-        console.log(response.data.accessToken);
-        console.log(response.data.refreshToken);
-        console.log(localStorage);
-        localStorage.setItem('accessToken', response.data.accessToken);
-        localStorage.setItem('refreshToken', response.data.refreshToken);
-
-        Axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.accessToken}`
-    })
-    .catch(function(error){
-       console.log("로그인 실패");
-       console.log(error);
-    });*/
 }
 
 </script>
