@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jwj.community.config.security.utils.JwtTokenUtil;
 import com.jwj.community.domain.entity.Member;
 import com.jwj.community.domain.refreshToken.service.RefreshTokenService;
+import com.jwj.community.web.login.dto.LoginSuccess;
 import com.jwj.community.web.login.jwt.JwtToken;
 import com.jwj.community.web.refreshToken.dto.request.RefreshTokenRequest;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,11 @@ public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHan
         // token 생성 시 넣어주는 1번째 파라미터값이 principal이 된다.
         Member member = (Member) authentication.getPrincipal();
         JwtToken jwtToken = jwtTokenUtil.generateToken(member);
+        LoginSuccess loginSuccess = LoginSuccess.builder()
+                .token(jwtToken)
+                .email(member.getEmail())
+                .nickName(member.getNickname())
+                .build();
 
         saveRefreshToken(jwtToken, member);
 
@@ -37,7 +43,7 @@ public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHan
         response.setContentType(APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(UTF_8.name());
 
-        objectMapper.writeValue(response.getWriter(), jwtToken);
+        objectMapper.writeValue(response.getWriter(), loginSuccess);
     }
 
     private void saveRefreshToken(JwtToken jwtToken, Member member) {
@@ -46,6 +52,6 @@ public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHan
                 .build();
         // 사용자의 refresh 토큰 값을 DB에 update 해주기
         // MemberEntity에 refreshToken 값 넣어주고 서비스에 update 로직 만들기
-        refreshTokenService.createRefreshToken(refreshTokenRequest.toEntity(), member);
+        refreshTokenService.createRefreshToken(refreshTokenRequest.toEntity(), member.getEmail());
     }
 }
