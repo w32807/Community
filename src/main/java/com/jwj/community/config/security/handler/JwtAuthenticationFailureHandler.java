@@ -28,6 +28,7 @@ public class JwtAuthenticationFailureHandler implements AuthenticationFailureHan
         ErrorResult errorResult = ErrorResult.builder()
                 .errorCode(String.valueOf(UNAUTHORIZED.value()))
                 .errorMessage(getErrorMessage(exception))
+                .exception(exception)
                 .build();
 
         response.setStatus(UNAUTHORIZED.value());
