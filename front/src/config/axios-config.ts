@@ -19,10 +19,9 @@ const router = useRouter();
 instance.interceptors.request.use(
     function (config) {
         // 요청이 전달되기 전에 작업 수행
-        let accessToken: string | null = null;
-        accessToken = localStorage.getItem("accessToken");
+        let accessToken: string = localStorage.getItem("accessToken") || "";
 
-        if(accessToken != null) {
+        if(accessToken != null && config.headers != null) {
             config.headers['Authorization'] = 'Bearer ' + accessToken;
         }
         return config;
@@ -51,12 +50,8 @@ instance.interceptors.response.use(
         if(error.response.data.exceptionName === 'ExpiredJwtException'){
             // 토큰이 만료되었을 때 refresh 토큰 발급 요청
             let jwtRefreshService = new JwtRefreshService();
-            let accessToken: string | null = null;
-            let refreshToken: string | null = null;
-
-            accessToken = localStorage.getItem('accessToken');
-            refreshToken = localStorage.getItem('refreshToken');
-
+            let accessToken: string = localStorage.getItem('accessToken') || "";
+            let refreshToken: string = localStorage.getItem('refreshToken') || "";
             let jwtToken = new JwtToken(accessToken, refreshToken);
 
             jwtRefreshService.refresh(jwtToken);

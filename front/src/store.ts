@@ -4,7 +4,7 @@ import Member from "./store/models/member";
 export default createStore({
     state: {
         isAuthenticated: false,
-        member: new Member()
+        member: new Member("", "")
     },
     getters: {
         // 위의 state를 매개변수로 받는다.
@@ -22,8 +22,8 @@ export default createStore({
         },
         logout(state) {
             state.isAuthenticated = false;
-            state.member.email = null;
-            state.member.name = null;
+            state.member.email = "";
+            state.member.name = "";
         },
     }
 });

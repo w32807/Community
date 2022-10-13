@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import {ref} from "vue";
 import axios from "../config/axios-config";
+import {useRouter} from "vue-router";
 
 const title = ref("");
 const content = ref("");
+const router = useRouter();
 
 const write = function (){
     axios.post('/board/board',{
@@ -12,7 +14,7 @@ const write = function (){
     })
     .then(() => {
         // 글 작성 완료 후 화면 이동하는 방법
-      router.replace({name: "home"});
+      router.push({name: "home"});
     })
     .catch(error => {
         console.log(error)
