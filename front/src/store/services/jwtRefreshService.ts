@@ -5,6 +5,7 @@ class JwtRefreshService{
     constructor() {}
 
     refresh(jwtToken: JwtToken){
+        jwtToken = jwtToken || new JwtToken("", "");
         axios.post('/refresh/refresh', jwtToken)
         .then(function(response){
 
