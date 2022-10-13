@@ -203,7 +203,7 @@ class BoardRestControllerTest {
                 .build();
 
         // expected
-        mockMvc.perform(post("/api/board")
+        mockMvc.perform(post("/api/board/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardSaveRequest))
                 .header(AUTHORIZATION, accessToken))
@@ -222,7 +222,7 @@ class BoardRestControllerTest {
                 .build();
 
         // expected
-        mockMvc.perform(post("/api/board")
+        mockMvc.perform(post("/api/board/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardSaveRequest))
                 .header(AUTHORIZATION, accessToken))
@@ -243,7 +243,7 @@ class BoardRestControllerTest {
                 .build();
 
         // expected
-        mockMvc.perform(post("/api/board")
+        mockMvc.perform(post("/api/board/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardSaveRequest))
                 .header(AUTHORIZATION, accessToken))
@@ -273,7 +273,7 @@ class BoardRestControllerTest {
                 .build();
 
         // expected
-        mockMvc.perform(put("/api/board")
+        mockMvc.perform(put("/api/board/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardUpdateRequest))
                 .header(AUTHORIZATION, accessToken))
@@ -308,7 +308,7 @@ class BoardRestControllerTest {
                 .build();
 
         // expected
-        mockMvc.perform(put("/api/board")
+        mockMvc.perform(put("/api/board/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardUpdateRequest))
                 .header(AUTHORIZATION, accessToken))
@@ -337,7 +337,7 @@ class BoardRestControllerTest {
                 .build();
 
         // expected
-        mockMvc.perform(put("/api/board")
+        mockMvc.perform(put("/api/board/board")
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(boardUpdateRequest))
                 .header(AUTHORIZATION, accessToken))

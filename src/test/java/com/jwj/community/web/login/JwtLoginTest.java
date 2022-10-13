@@ -67,8 +67,8 @@ public class JwtLoginTest {
         mockMvc.perform(post("/api/login")
                 .content(loginTestDTOByte)
                 .contentType(APPLICATION_JSON))
-                .andExpect(jsonPath("$.accessToken").isString())
-                .andExpect(jsonPath("$.refreshToken").isString())
+                .andExpect(jsonPath("$.token.accessToken").isString())
+                .andExpect(jsonPath("$.token.refreshToken").isString())
                 .andDo(print());
     }
 
