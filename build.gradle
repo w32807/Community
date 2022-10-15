@@ -89,6 +89,7 @@ clean {
 
 test {
 	outputs.dir snippetsDir
+	exclude '**/*'
 }
 
 asciidoctor {
