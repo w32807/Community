@@ -3,19 +3,17 @@
 # 그리고 구분자 및 spring.config.activate.on-profile로 설정을 구분할 수 있다.
 spring:
   profiles:
-    active: test
-
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:tcp://localhost/~/test
-    username: sa
-    password:
-
+    active: dev
 ---
 spring:
   config:
     activate:
       on-profile: dev
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/test
+    username: sa
+    password:
   jpa:
     hibernate:
       ddl-auto: update
@@ -28,7 +26,12 @@ spring:
 spring:
   config:
     activate:
-      on-profile: test
+      on-profile: prod
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.0.87:3306/community?useSSL=true&verifyServerCertificate=true&allowPublicKeyRetrieval=true&&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: Community
+    password: community
   jpa:
     hibernate:
       ddl-auto: create
@@ -36,23 +39,11 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
-    database-platform: org.hibernate.dialect.H2Dialect
-
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+---
 #Spring security를 본격 구현하기 전 테스트 로그인 계정
-  security:
-    debug: false
-
-  main.banner-mode: off
-
   messages:
     basename: message/messages,errors
-
-  servlet:
-    multipart:
-      enabled: true
-      location: C:\\upload
-      max-request-size: 30MB
-      max-file-size: 10MB
 
 logging:
   level:
@@ -62,15 +53,4 @@ logging:
     # hibernate.type: trace
       springframework: error
 
-#URL에 세션 ID가 붙는 것 방지
-server:
-  servlet:
-    session:
-      tracking-modes: cookie
-      timeout: 1800
-
-#파일경로
-file.common.dir: C:\\upload\common\
-file.image.dir: C:\\upload\image\
-file.excel.dir: C:\\upload\excel\
 jwt.secretKey: "47edd4a2-8555-4078-9b53-b652e11fc5dd"
