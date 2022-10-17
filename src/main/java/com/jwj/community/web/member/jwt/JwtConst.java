@@ -1,4 +1,4 @@
-package com.jwj.community.web.login.jwt;
+package com.jwj.community.web.member.jwt;
 
 public interface JwtConst {
 

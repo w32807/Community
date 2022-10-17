@@ -1,4 +1,4 @@
-package com.jwj.community.web.login.response;
+package com.jwj.community.web.member.dto.response;
 
 import com.jwj.community.domain.common.enums.Level;
 import com.jwj.community.domain.common.enums.MemberState;

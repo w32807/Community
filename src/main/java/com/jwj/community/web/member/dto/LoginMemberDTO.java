@@ -1,4 +1,4 @@
-package com.jwj.community.web.login.dto;
+package com.jwj.community.web.member.dto;
 
 import lombok.Builder;
 import lombok.Data;

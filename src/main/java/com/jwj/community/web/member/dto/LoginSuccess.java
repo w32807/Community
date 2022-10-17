@@ -1,6 +1,6 @@
-package com.jwj.community.web.login.dto;
+package com.jwj.community.web.member.dto;
 
-import com.jwj.community.web.login.jwt.JwtToken;
+import com.jwj.community.web.member.jwt.JwtToken;
 import lombok.Builder;
 import lombok.Data;
 

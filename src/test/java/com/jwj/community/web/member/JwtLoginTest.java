@@ -1,9 +1,9 @@
-package com.jwj.community.web.login;
+package com.jwj.community.web.member;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jwj.community.domain.member.service.MemberService;
 import com.jwj.community.web.code.jwt.JwtTokenFactory;
-import com.jwj.community.web.login.request.MemberSaveRequest;
+import com.jwj.community.web.member.dto.request.MemberSaveRequest;
 import lombok.Builder;
 import lombok.Data;
 import org.junit.jupiter.api.BeforeEach;

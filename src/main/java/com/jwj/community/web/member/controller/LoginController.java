@@ -1,4 +1,4 @@
-package com.jwj.community.web.login.controller;
+package com.jwj.community.web.member.controller;
 
 import com.jwj.community.domain.entity.Member;
 import org.springframework.security.core.Authentication;
