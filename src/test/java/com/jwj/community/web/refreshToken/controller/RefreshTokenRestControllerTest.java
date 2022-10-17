@@ -64,7 +64,7 @@ class RefreshTokenRestControllerTest {
                 .refreshToken(jwtTokenFactory.getJwtToken().getRefreshToken())
                 .build();
 
-        Member savedMember = memberService.findById(memberService.createMember(memberSaveRequest.toEntity()));
+        Member savedMember = memberService.findById(memberService.addMember(memberSaveRequest.toEntity()));
         RefreshToken refreshToken = refreshTokenService.getRefreshToken(refreshTokenService.createRefreshToken(request.toEntity(), savedMember.getEmail()));
 
         this.refreshToken = refreshToken.getToken();

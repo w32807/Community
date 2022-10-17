@@ -50,7 +50,7 @@ class JwtAuthenticationFilterTest {
                 .nickname("닉네임")
                 .build();
 
-        memberService.createMember(request.toEntity());
+        memberService.addMember(request.toEntity());
     }
 
 /*

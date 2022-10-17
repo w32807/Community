@@ -21,6 +21,6 @@ public class initService {
 
         List<MemberSaveRequest> list =  JSONReadUtils.readJSONList(filePath, MemberSaveRequest.class);
 
-        list.stream().forEach(member -> memberService.createMember(member.toEntity()));
+        list.stream().forEach(member -> memberService.addMember(member.toEntity()));
     }
 }

@@ -42,7 +42,7 @@ class RefreshTokenServiceTest {
 
         member = request.toEntity();
 
-        memberService.createMember(member);
+        memberService.addMember(member);
     }
 
     @Test
