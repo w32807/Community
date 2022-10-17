@@ -2,8 +2,8 @@ package com.jwj.community.config.security.filter;
 
 import com.jwj.community.domain.member.service.MemberService;
 import com.jwj.community.web.code.jwt.JwtTokenFactory;
-import com.jwj.community.web.login.jwt.JwtToken;
-import com.jwj.community.web.login.request.MemberSaveRequest;
+import com.jwj.community.web.member.jwt.JwtToken;
+import com.jwj.community.web.member.dto.request.MemberSaveRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.jwj.community.web.login.jwt.JwtConst.AUTHORIZATION;
+import static com.jwj.community.web.member.jwt.JwtConst.AUTHORIZATION;
 import static java.util.Locale.getDefault;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.MediaType.APPLICATION_JSON;

@@ -2,7 +2,7 @@ package com.jwj.community.domain.member.service;
 
 import com.jwj.community.domain.entity.Member;
 import com.jwj.community.domain.member.repository.MemberRepository;
-import com.jwj.community.web.login.jwt.JwtToken;
+import com.jwj.community.web.member.jwt.JwtToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

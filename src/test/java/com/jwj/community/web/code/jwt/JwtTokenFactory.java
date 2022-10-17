@@ -2,8 +2,8 @@ package com.jwj.community.web.code.jwt;
 
 import com.jwj.community.config.security.utils.JwtTokenUtil;
 import com.jwj.community.domain.entity.Member;
-import com.jwj.community.web.login.jwt.JwtToken;
-import com.jwj.community.web.login.request.MemberSaveRequest;
+import com.jwj.community.web.member.jwt.JwtToken;
+import com.jwj.community.web.member.dto.request.MemberSaveRequest;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import java.util.Date;
 
 import static com.jwj.community.domain.common.enums.Roles.ROLE_ADMIN;
 import static com.jwj.community.domain.common.enums.Roles.ROLE_MEMBER;
-import static com.jwj.community.web.login.jwt.JwtConst.TOKEN_HEADER_PREFIX;
+import static com.jwj.community.web.member.jwt.JwtConst.TOKEN_HEADER_PREFIX;
 import static io.jsonwebtoken.SignatureAlgorithm.HS256;
 import static io.jsonwebtoken.io.Encoders.BASE64;
 import static io.jsonwebtoken.security.Keys.hmacShaKeyFor;

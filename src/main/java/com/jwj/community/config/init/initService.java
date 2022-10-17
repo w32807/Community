@@ -2,7 +2,7 @@ package com.jwj.community.config.init;
 
 import com.jwj.community.domain.member.service.MemberService;
 import com.jwj.community.utils.JSONReadUtils;
-import com.jwj.community.web.login.request.MemberSaveRequest;
+import com.jwj.community.web.member.dto.request.MemberSaveRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

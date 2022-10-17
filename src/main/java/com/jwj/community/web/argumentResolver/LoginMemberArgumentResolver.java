@@ -2,7 +2,7 @@ package com.jwj.community.web.argumentResolver;
 
 import com.jwj.community.config.security.token.JwtAuthenticationToken;
 import com.jwj.community.web.annotation.LoginMember;
-import com.jwj.community.web.login.dto.LoginMemberDTO;
+import com.jwj.community.web.member.dto.LoginMemberDTO;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.support.WebDataBinderFactory;

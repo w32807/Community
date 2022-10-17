@@ -2,7 +2,7 @@ package com.jwj.community.config.security.utils;
 
 import com.jwj.community.domain.common.enums.Roles;
 import com.jwj.community.domain.entity.Member;
-import com.jwj.community.web.login.jwt.JwtToken;
+import com.jwj.community.web.member.jwt.JwtToken;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-import static com.jwj.community.web.login.jwt.JwtConst.TOKEN_HEADER_PREFIX;
+import static com.jwj.community.web.member.jwt.JwtConst.TOKEN_HEADER_PREFIX;
 import static io.jsonwebtoken.SignatureAlgorithm.HS256;
 import static io.jsonwebtoken.io.Encoders.BASE64;
 import static io.jsonwebtoken.security.Keys.hmacShaKeyFor;

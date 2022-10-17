@@ -2,7 +2,7 @@ package com.jwj.community.config.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jwj.community.config.security.token.JwtAuthenticationToken;
-import com.jwj.community.web.login.request.MemberSaveRequest;
+import com.jwj.community.web.member.dto.request.MemberSaveRequest;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

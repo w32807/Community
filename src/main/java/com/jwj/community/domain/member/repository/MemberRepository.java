@@ -1,7 +1,7 @@
 package com.jwj.community.domain.member.repository;
 
 import com.jwj.community.domain.entity.Member;
-import com.jwj.community.web.login.jwt.JwtToken;
+import com.jwj.community.web.member.jwt.JwtToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberQueryRepository {

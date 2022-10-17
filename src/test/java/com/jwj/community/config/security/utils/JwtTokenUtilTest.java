@@ -2,7 +2,7 @@ package com.jwj.community.config.security.utils;
 
 import com.jwj.community.domain.common.enums.Roles;
 import com.jwj.community.web.code.jwt.JwtTokenFactory;
-import com.jwj.community.web.login.jwt.JwtToken;
+import com.jwj.community.web.member.jwt.JwtToken;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -8,7 +8,7 @@ import com.jwj.community.domain.refreshToken.service.RefreshTokenService;
 import com.jwj.community.web.board.dto.request.BoardSaveRequest;
 import com.jwj.community.web.board.dto.request.BoardUpdateRequest;
 import com.jwj.community.web.code.jwt.JwtTokenFactory;
-import com.jwj.community.web.login.request.MemberSaveRequest;
+import com.jwj.community.web.member.dto.request.MemberSaveRequest;
 import com.jwj.community.web.refreshToken.dto.request.RefreshTokenRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
 
-import static com.jwj.community.web.login.jwt.JwtConst.AUTHORIZATION;
+import static com.jwj.community.web.member.jwt.JwtConst.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;

@@ -4,7 +4,7 @@ import com.jwj.community.domain.entity.Member;
 import com.jwj.community.domain.entity.RefreshToken;
 import com.jwj.community.domain.member.service.MemberService;
 import com.jwj.community.web.code.jwt.JwtTokenFactory;
-import com.jwj.community.web.login.request.MemberSaveRequest;
+import com.jwj.community.web.member.dto.request.MemberSaveRequest;
 import com.jwj.community.web.refreshToken.dto.request.RefreshTokenRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

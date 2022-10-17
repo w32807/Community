@@ -1,7 +1,7 @@
 package com.jwj.community.domain.member.repository;
 
 import com.jwj.community.domain.entity.Member;
-import com.jwj.community.web.login.request.MemberSaveRequest;
+import com.jwj.community.web.member.dto.request.MemberSaveRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

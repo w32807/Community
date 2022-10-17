@@ -8,7 +8,7 @@ import com.jwj.community.web.board.dto.request.BoardUpdateRequest;
 import com.jwj.community.web.board.dto.response.BoardResponse;
 import com.jwj.community.web.common.result.ListResult;
 import com.jwj.community.web.common.result.Result;
-import com.jwj.community.web.login.dto.LoginMemberDTO;
+import com.jwj.community.web.member.dto.LoginMemberDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

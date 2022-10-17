@@ -5,7 +5,7 @@ import com.jwj.community.domain.entity.Member;
 import com.jwj.community.domain.member.repository.MemberRepository;
 import com.jwj.community.web.board.dto.request.BoardSaveRequest;
 import com.jwj.community.web.code.jwt.JwtTokenFactory;
-import com.jwj.community.web.login.request.MemberSaveRequest;
+import com.jwj.community.web.member.dto.request.MemberSaveRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.jwj.community.web.login.jwt.JwtConst.AUTHORIZATION;
+import static com.jwj.community.web.member.jwt.JwtConst.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @SpringBootTest
