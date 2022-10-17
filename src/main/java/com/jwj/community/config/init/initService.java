@@ -6,7 +6,6 @@ import com.jwj.community.web.member.dto.request.MemberSaveRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Component
@@ -15,7 +14,7 @@ public class initService {
 
     private final MemberService memberService;
 
-    @PostConstruct
+    //@PostConstruct
     public void memberInit(){
         String filePath = "initData/memberInitData.json";
 

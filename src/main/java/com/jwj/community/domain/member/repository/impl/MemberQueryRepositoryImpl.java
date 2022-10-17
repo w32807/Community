@@ -19,12 +19,26 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
 
     @Override
     public Member findByEmail(String email) throws UsernameNotFoundException {
-        return queryFactory.selectFrom(member)
+        return queryFactory
+                .selectFrom(member)
                 .where(emailEq(email))
+                .fetchOne();
+    }
+
+    @Override
+    public Member findByNick(String nick) {
+        return queryFactory
+                .selectFrom(member)
+                .where(nickEq(nick))
                 .fetchOne();
     }
 
     private BooleanBuilder emailEq(String email) {
         return nullSafeBuilder(() -> member.email.eq(email));
     }
+
+    private BooleanBuilder nickEq(String nick) {
+        return nullSafeBuilder(() -> member.nickname.eq(nick));
+    }
+
 }

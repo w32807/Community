@@ -1,7 +1,72 @@
 package com.jwj.community.web.member.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import com.jwj.community.domain.member.service.MemberService;
+import com.jwj.community.web.common.result.ListResult;
+import com.jwj.community.web.common.result.Result;
+import com.jwj.community.web.member.dto.request.MemberSaveRequest;
+import com.jwj.community.web.member.dto.request.MemberUpdateRequest;
+import com.jwj.community.web.member.dto.response.MemberResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/member")
 public class MemberRestController {
+
+    private final MemberService memberService;
+
+    @GetMapping("/members")
+    public ResponseEntity<ListResult<MemberResponse>> members(){
+        // todo Pageable로 페이징 기능 구현해야 됨
+        List<MemberResponse> members = memberService.getMembers().stream()
+                .map(member -> member.toResponse())
+                .collect(toList());
+
+        ListResult<MemberResponse> listResult = ListResult.<MemberResponse>builder()
+                .list(members)
+                .build();
+
+        return new ResponseEntity<>(listResult, OK);
+    }
+
+    @GetMapping("/member")
+    public ResponseEntity<Result> member(@PathVariable("id") Long id){
+        MemberResponse member = memberService.findById(id).toResponse();
+
+        Result<MemberResponse> result = Result.<MemberResponse>builder()
+                .data(member)
+                .build();
+
+        return new ResponseEntity<>(result, OK);
+    }
+
+    @PostMapping("/addMember")
+    public ResponseEntity<Result> addMember(@RequestBody @Valid MemberSaveRequest request){
+        Result<Long> result = Result.<Long>builder()
+                .data(memberService.addMember(request.toEntity()))
+                .build();
+
+        return new ResponseEntity<>(result, OK);
+    }
+
+    @PutMapping("/member")
+    public ResponseEntity<Result> updateBoard(@RequestBody @Valid MemberUpdateRequest request){
+        // todo 나중에 변경할 항목을 정해서 구현
+        return null;
+    }
+
+    @PutMapping("/deActive")
+    public void deActiveMember(@PathVariable("id") Long id){
+        // todo 회원 삭제 대신 활성화를 비활성화로 바꾸는 기능 구현하기
+        memberService.deActiveMember(id);
+    }
+
 }

@@ -3,7 +3,6 @@ package com.jwj.community.domain.entity;
 import com.jwj.community.domain.common.enums.Level;
 import com.jwj.community.domain.common.enums.MemberState;
 import com.jwj.community.domain.common.enums.Roles;
-import com.jwj.community.utils.ModelMapperUtils;
 import com.jwj.community.web.member.dto.request.MemberSaveRequest;
 import com.jwj.community.web.member.dto.response.MemberResponse;
 import lombok.AccessLevel;
@@ -49,6 +48,10 @@ public class Member extends BaseEntity {
         this.nickname = request.getNickname();
     }
 
+    @Builder(builderMethodName = "update")
+    public Member(Long id, String nickname){
+    }
+
     @Builder(builderClassName = "LoginMember", builderMethodName = "LoginMember")
     public Member(Long id) {
         this.id = id;
@@ -83,8 +86,14 @@ public class Member extends BaseEntity {
     }
 
     public MemberResponse toResponse(){
-        ModelMapperUtils mapper = new ModelMapperUtils();
-        return mapper.map(this, MemberResponse.class);
+        return MemberResponse.builder()
+                .id(this.id)
+                .email(this.email)
+                .nickname(this.nickname)
+                .levelPoint(this.levelPoint)
+                .level(this.level)
+                .state(this.state)
+                .build();
     }
 
 }

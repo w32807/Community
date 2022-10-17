@@ -29,6 +29,7 @@ public class BoardRestController {
 
     @GetMapping("/boards")
     public ResponseEntity<ListResult<BoardResponse>> boards(){
+        // todo Pageable로 페이징 기능 구현해야 됨
         List<BoardResponse> boards = boardService.getBoards().stream()
                 .map(board -> board.toResponse())
                 .collect(toList());

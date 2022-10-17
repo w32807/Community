@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final MessageSource messageSource;
     private final JwtTokenUtil jwtTokenUtil;
 
-    final String[] whitelist = {"/api/login", "/api/refresh/refresh"};
+    final String[] whitelist = {"/api/login", "/api/refresh/refresh", "/api/member/addMember"};
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

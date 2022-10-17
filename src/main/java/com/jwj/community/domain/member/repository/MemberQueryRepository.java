@@ -7,4 +7,6 @@ public interface MemberQueryRepository {
 
     Member findByEmail(String email) throws UsernameNotFoundException;
 
+    Member findByNick(String nick);
+
 }
