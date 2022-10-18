@@ -52,7 +52,7 @@ public class JwtSecurityConfig {
         http
             .antMatcher("/api/**")
             .authorizeRequests()
-            .antMatchers("/api/login", "/api/refresh/**").permitAll()
+            .antMatchers("/api/login", "/api/refresh/**", "/api/member/addMember").permitAll()
             .anyRequest().authenticated();
 
         http.sessionManagement()
