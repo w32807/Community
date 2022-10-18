@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -117,7 +116,6 @@ class BoardRestControllerTest {
 
     @Test
     @DisplayName("글 여러 개 조회 시 글이 없을 때")
-    @WithMockUser
     void test2() throws Exception{
         // given
 
@@ -132,7 +130,6 @@ class BoardRestControllerTest {
 
     @Test
     @DisplayName("글 1개 조회하기")
-    @WithMockUser
     void test3() throws Exception{
         // given
         BoardSaveRequest boardSaveRequest = BoardSaveRequest.builder()
@@ -154,7 +151,6 @@ class BoardRestControllerTest {
 
     @Test
     @DisplayName("글 1개 조회 시 글 존재하지 않음")
-    @WithMockUser
     void test4() throws Exception{
         // given
         Long id = -1L;
@@ -170,7 +166,6 @@ class BoardRestControllerTest {
 
     @Test
     @DisplayName("글 1개 삭제")
-    @WithMockUser
     void test5() throws Exception{
         // given
         BoardSaveRequest boardSaveRequest = BoardSaveRequest.builder()
@@ -194,7 +189,6 @@ class BoardRestControllerTest {
 
     @Test
     @DisplayName("글 저장 성공")
-    @WithMockUser
     void test6() throws Exception{
         // given
         BoardSaveRequest boardSaveRequest = BoardSaveRequest.builder()
@@ -214,7 +208,6 @@ class BoardRestControllerTest {
 
     @Test
     @DisplayName("글 저장 시 글 제목은 필수입력")
-    @WithMockUser
     void test7() throws Exception{
         // given
         BoardSaveRequest boardSaveRequest = BoardSaveRequest.builder()
@@ -235,7 +228,6 @@ class BoardRestControllerTest {
 
     @Test
     @DisplayName("글 저장 시 글 내용은 필수입력")
-    @WithMockUser
     void test8() throws Exception{
         // given
         BoardSaveRequest boardSaveRequest = BoardSaveRequest.builder()
@@ -256,7 +248,6 @@ class BoardRestControllerTest {
 
     @Test
     @DisplayName("글 수정 성공")
-    @WithMockUser
     void test9() throws Exception{
         // given
         BoardSaveRequest boardSaveRequest = BoardSaveRequest.builder()
@@ -292,7 +283,6 @@ class BoardRestControllerTest {
 
     @Test
     @DisplayName("글 수정 시 글 제목은 필수입력")
-    @WithMockUser
     void test10() throws Exception{
         // given
         BoardSaveRequest boardSaveRequest = BoardSaveRequest.builder()
@@ -321,7 +311,6 @@ class BoardRestControllerTest {
 
     @Test
     @DisplayName("글 수정 시 글 내용은 필수입력")
-    @WithMockUser
     void test11() throws Exception{
         // given
         BoardSaveRequest boardSaveRequest = BoardSaveRequest.builder()
