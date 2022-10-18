@@ -6,8 +6,11 @@ import com.jwj.community.web.common.result.Result;
 import com.jwj.community.web.member.dto.request.MemberSaveRequest;
 import com.jwj.community.web.member.dto.request.MemberUpdateRequest;
 import com.jwj.community.web.member.dto.response.MemberResponse;
+import com.jwj.community.web.validator.MemberValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,6 +25,7 @@ import static org.springframework.http.HttpStatus.OK;
 public class MemberRestController {
 
     private final MemberService memberService;
+    private final MemberValidator memberValidator;
 
     @GetMapping("/members")
     public ResponseEntity<ListResult<MemberResponse>> members(){
@@ -49,7 +53,12 @@ public class MemberRestController {
     }
 
     @PostMapping("/addMember")
-    public ResponseEntity<Result> addMember(@RequestBody @Valid MemberSaveRequest request){
+    public ResponseEntity<Result> addMember(@RequestBody @Valid MemberSaveRequest request, BindingResult bindingResult) throws BindException {
+        memberValidator.validate(request, bindingResult);
+
+        if(bindingResult.hasErrors()){
+            throw new BindException(bindingResult);
+        }
         Result<Long> result = Result.<Long>builder()
                 .data(memberService.addMember(request.toEntity()))
                 .build();

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import static org.springframework.util.StringUtils.hasText;
+
 @Component
 @RequiredArgsConstructor
 public class MemberValidator implements Validator {
@@ -29,18 +31,19 @@ public class MemberValidator implements Validator {
     private void isEmailDuplicate(String email, Errors errors) {
         if(memberService.findByEmail(email) != null){
             errors.reject("emailDuplicated", "duplicate.email");
+            errors.rejectValue("email", "","이미 사용중인 이메일입니다.");
         }
     }
 
-    private void isNickDuplicate(String nick, Errors errors) {
-        if(memberService.findByNickname(nick) != null){
-            errors.reject("nickDuplicated", "duplicate.nick");
+    private void isNickDuplicate(String nickname, Errors errors) {
+        if(memberService.findByNickname(nickname) != null){
+            errors.rejectValue("nickname", "","이미 사용중인 닉네임입니다.");
         }
     }
 
     private Errors isEqualPassword(String pwd, String conPwd, Errors errors) {
-        if(!pwd.equals(conPwd)){
-            errors.rejectValue("password", "confirm.pwd.not.match","비밀번호가 일치하지 않습니다.");
+        if(hasText(pwd) && hasText(conPwd) && !pwd.equals(conPwd)){
+            errors.rejectValue("password", "","비밀번호가 일치하지 않습니다.");
         }
         return errors;
     }

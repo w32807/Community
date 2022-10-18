@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor
@@ -15,17 +15,17 @@ import javax.validation.constraints.NotEmpty;
 @Builder
 public class MemberSaveRequest {
 
-    @Email(message = "이메일 형식을 확인해 주세요.")
-    @NotEmpty(message = "이메일은 필수 입력입니다.")
+    @Email(message = "{field.required.emailFormat}")
+    @NotBlank(message = "{field.required.email}")
     private String email;
-    
-    @NotEmpty(message = "비밀번호는 필수 입력입니다.")
+
+    @NotBlank(message = "{field.required.password}")
     private String password;
-    
-    @NotEmpty(message = "비밀번호 확인은 필수 입력입니다.")
+
+    @NotBlank(message = "{field.required.confirmPassword}")
     private String confirmPassword;
-    
-    @NotEmpty(message = "닉네임은 필수 입력입니다.")
+
+    @NotBlank(message = "{field.required.nickname}")
     private String nickname;
 
     public Member toEntity(){
