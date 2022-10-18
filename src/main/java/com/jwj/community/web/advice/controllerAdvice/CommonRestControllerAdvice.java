@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -35,7 +35,7 @@ public class CommonRestControllerAdvice {
     }
 
     @ExceptionHandler
-    public ResponseEntity<FieldErrorResult> methodArgumentNotValidExHandler(MethodArgumentNotValidException ex){
+    public ResponseEntity<FieldErrorResult> methodArgumentNotValidExHandler(BindException ex){
         FieldErrorResult errorResult = FieldErrorResult.builder()
                 .errorCode(String.valueOf(BAD_REQUEST.value()))
                 .ex(ex)

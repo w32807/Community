@@ -2,7 +2,7 @@ package com.jwj.community.web.exception.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.validation.BindException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +14,12 @@ public class FieldErrorResult {
     private final List<FieldError> fieldErrors = new ArrayList<>();
 
     @Builder
-    public FieldErrorResult(String errorCode, MethodArgumentNotValidException ex){
+    public FieldErrorResult(String errorCode, BindException ex){
         this.errorCode = errorCode;
         setFieldErrors(ex);
     }
 
-    public void setFieldErrors(MethodArgumentNotValidException ex){
+    public void setFieldErrors(BindException ex){
         ex.getFieldErrors().stream()
             .map(fieldError -> FieldError.builder()
                 .field(fieldError.getField())
