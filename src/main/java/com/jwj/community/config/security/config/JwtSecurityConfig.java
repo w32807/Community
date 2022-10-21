@@ -40,6 +40,7 @@ public class JwtSecurityConfig {
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtTokenUtil jwtTokenUtil;
+    private final WhiteList whiteList;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
@@ -52,7 +53,7 @@ public class JwtSecurityConfig {
         http
             .antMatcher("/api/**")
             .authorizeRequests()
-            .antMatchers("/api/login", "/api/refresh/**", "/api/member/addMember").permitAll()
+            .antMatchers(whiteList.getWhiteList() ).permitAll()
             .anyRequest().authenticated();
 
         http.sessionManagement()

@@ -2,6 +2,7 @@ package com.jwj.community.config.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jwj.community.config.security.config.LoginContext;
+import com.jwj.community.config.security.config.WhiteList;
 import com.jwj.community.config.security.token.JwtAuthenticationToken;
 import com.jwj.community.config.security.utils.JwtTokenUtil;
 import com.jwj.community.web.exception.dto.ErrorResult;
@@ -42,8 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
     private final MessageSource messageSource;
     private final JwtTokenUtil jwtTokenUtil;
-
-    final String[] whitelist = {"/api/login", "/api/refresh/refresh", "/api/member/addMember"};
+    private final WhiteList whiteList;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -76,7 +76,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private boolean isRequiredAuthPath(String requestURI){
-        return !PatternMatchUtils.simpleMatch(whitelist, requestURI);
+        return !PatternMatchUtils.simpleMatch(whiteList.getWhiteList(), requestURI);
     }
 
     private boolean isValidAuthHeader(String authorizationHeader){
