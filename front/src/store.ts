@@ -1,7 +1,11 @@
 import { createStore } from "vuex";
 import Member from "./store/models/member";
+import createPersistedState from 'vuex-persistedstate';
 
 export default createStore({
+    plugins: [
+      createPersistedState()
+    ],
     state: {
         isAuthenticated: false,
         member: new Member("", "")
