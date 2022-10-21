@@ -168,8 +168,7 @@ public class JwtTokenUtil {
     }
 
     private Date getAtExpTime(){
-        //LocalDateTime atExpTime = LocalDateTime.now().plusDays(7);
-        LocalDateTime atExpTime = now().plusSeconds(10);
+        LocalDateTime atExpTime = LocalDateTime.now().plusDays(7);
         return Date.from(atExpTime.atZone(systemDefault()).toInstant());
     }
 
