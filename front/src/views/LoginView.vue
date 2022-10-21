@@ -36,13 +36,9 @@ const login = function (){
 <template>
     <div class="login">
         <!-- v-model란 자동으로 vue의 데이터 속성에 연결된다., -->
-        <el-input v-model="email" type="email" placeholder="이메일을 입력 해 주세요"/>
-    </div>
-    <div class="mt-2">
-        <el-input v-model="password" type="password" placeholder="비밀번호를 입력 해 주세요"/>
-    </div>
-    <div class="mt-2">
-        <el-button type="primary" @click="login()">로그인</el-button>
+        <el-input class="mt-2" v-model="email" type="email" placeholder="이메일을 입력 해 주세요"/>
+        <el-input class="mt-2" v-model="password" type="password" placeholder="비밀번호를 입력 해 주세요"/>
+        <el-button class="mt-2" type="primary" @click="login()">로그인</el-button>
     </div>
 </template>
 

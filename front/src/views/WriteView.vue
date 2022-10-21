@@ -25,13 +25,9 @@ const write = function (){
 
 <template>
     <div>
-        <el-input v-model="title" placeholder="제목을 입력 해 주세요"/>
-    </div>
-    <div class="mt-2">
-        <el-input v-model="content" type="textarea" rows="15"/>
-    </div>
-    <div class="mt-2">
-        <el-button type="primary" @click="write()">작성완료</el-button>
+        <el-input class="mt-2" v-model="title" placeholder="제목을 입력 해 주세요"/>
+        <el-input class="mt-2" v-model="content" type="textarea" rows="15"/>
+        <el-button class="mt-2" type="primary" @click="write()">작성완료</el-button>
     </div>
 </template>
 

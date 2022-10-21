@@ -1,20 +1,20 @@
 <script setup lang="ts">
-    import {ref} from "vue";
-    import { RouterLink, RouterView } from "vue-router";
-    import {useRouter} from "vue-router";
-    import store from "../../store";
+import {ref} from "vue";
+import { RouterLink, RouterView } from "vue-router";
+import {useRouter} from "vue-router";
+import store from "../../store";
 
-    const router = useRouter();
-    const logout = function(){
-        store.commit('logout');
-        router.push({name: "home"});
-    }
+const router = useRouter();
+const logout = function(){
+    store.commit('logout');
+    router.push({name: "home"});
+}
 </script>
 
 <template>
     <el-row :gutter="20" align="middle">
         <el-col :span="16">
-            <el-link :underline="false" @click="$router.push({ path: '/' })">로고</el-link>
+            <el-link :underline="false" @click="$ .push({ path: '/' })">로고</el-link>
         </el-col>
         <el-col :span="8">
             <el-descriptions v-if="store.getters.isAuthenticated">

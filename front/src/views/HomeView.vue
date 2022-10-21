@@ -29,7 +29,6 @@ axios.get('/board/boards')
         <el-table-column prop="id" label="글번호" width="100" header-align="center" align="center"/>
         <el-table-column prop="title" label="제목" header-align="center"/>
     </el-table>
-
 </template>
 
 <style>
