@@ -28,8 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-;
-
 @SpringBootTest
 @AutoConfigureMockMvc // SpringBootTest와 MockMvc 주입을 같이할 때 사용!
 @Transactional
@@ -56,6 +54,8 @@ class MemberRestControllerTest {
 
     private String saveMemberEmail = "admin@google.com";
 
+    private String saveMemberNickname = "nickname";
+
     private Member savedMember;
 
     private String accessToken;
@@ -64,6 +64,7 @@ class MemberRestControllerTest {
     void setup(){
         MemberSaveRequest memberSaveRequest = MemberSaveRequest.builder()
                 .email(saveMemberEmail)
+                .nickname(saveMemberNickname)
                 .password("1234")
                 .build();
 
@@ -231,4 +232,44 @@ class MemberRestControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("회원 등록 시 이메일은 중복되면 안된다.")
+    void test8() throws Exception{
+        // given
+        MemberSaveRequest memberSaveRequest = MemberSaveRequest.builder()
+                .email(saveMemberEmail)
+                .password("1234")
+                .confirmPassword("1234")
+                .nickname("test nickname")
+                .build();
+
+        // expected
+        mockMvc.perform(post("/api/member/addMember")
+                .contentType(APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(memberSaveRequest)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorCode").value(400))
+                .andDo(print());
+    }
+
+
+    @Test
+    @DisplayName("회원 등록 시 닉네임은 중복되면 안된다.")
+    void test9() throws Exception{
+        // given
+        MemberSaveRequest memberSaveRequest = MemberSaveRequest.builder()
+                .email("admin@google.com")
+                .password("1234")
+                .confirmPassword("1234124512412412")
+                .nickname(saveMemberNickname)
+                .build();
+
+        // expected
+        mockMvc.perform(post("/api/member/addMember")
+                .contentType(APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(memberSaveRequest)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorCode").value(400))
+                .andDo(print());
+    }
 }
