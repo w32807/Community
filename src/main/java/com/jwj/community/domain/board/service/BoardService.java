@@ -35,7 +35,7 @@ public class BoardService {
     }
 
     public List<Board> getBoards(){
-        return boardRepository.findAll();
+        return boardRepository.getBoards();
     }
 
     public void deleteBoard(Long id){

@@ -29,7 +29,7 @@ public class Board extends BaseEntity{
 
     private int views = 0;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Member member;
 
     @Builder(builderMethodName = "update")
