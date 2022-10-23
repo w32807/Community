@@ -14,17 +14,7 @@ public class BoardSearchCondition {
 
     private final Integer page;
     private final Integer size;
-
     private String keyword;
-    /*
-        "T"
-        "C"
-        "W"
-        "TC"
-        "CW"
-        "TW"
-        "TWC"
-    * */
     private String searchType;
 
     public BoardSearchCondition(Integer page, Integer size, String searchType){
