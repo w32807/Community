@@ -46,7 +46,7 @@ public class BoardRestController {
 
         ListResult<BoardResponse> listResult = ListResult.<BoardResponse>builder()
                 .list(boards)
-                .totalSize(page.getTotalPages())
+                .page(page)
                 .build();
 
         return ok().body(listResult);
