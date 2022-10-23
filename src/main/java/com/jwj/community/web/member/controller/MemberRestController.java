@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static com.jwj.community.web.member.dto.response.MemberResponse.of;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -31,7 +32,7 @@ public class MemberRestController {
     public ResponseEntity<ListResult<MemberResponse>> members(){
         // todo Pageable로 페이징 기능 구현해야 됨
         List<MemberResponse> members = memberService.getMembers().stream()
-                .map(member -> member.toResponse())
+                .map(member -> of(member))
                 .collect(toList());
 
         ListResult<MemberResponse> listResult = ListResult.<MemberResponse>builder()
@@ -43,10 +44,8 @@ public class MemberRestController {
 
     @GetMapping("/member")
     public ResponseEntity<Result> member(@PathVariable("id") Long id){
-        MemberResponse member = memberService.findById(id).toResponse();
-
         Result<MemberResponse> result = Result.<MemberResponse>builder()
-                .data(member)
+                .data(of(memberService.findById(id)))
                 .build();
 
         return ok().body(result);

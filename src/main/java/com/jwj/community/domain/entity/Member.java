@@ -4,7 +4,6 @@ import com.jwj.community.domain.common.enums.Level;
 import com.jwj.community.domain.common.enums.MemberState;
 import com.jwj.community.domain.common.enums.Roles;
 import com.jwj.community.web.member.dto.request.MemberSaveRequest;
-import com.jwj.community.web.member.dto.response.MemberResponse;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -83,17 +82,6 @@ public class Member extends BaseEntity {
 
     public void changeRefreshToken(RefreshToken refreshToken) {
         this.refreshToken = refreshToken;
-    }
-
-    public MemberResponse toResponse(){
-        return MemberResponse.builder()
-                .id(this.id)
-                .email(this.email)
-                .nickname(this.nickname)
-                .levelPoint(this.levelPoint)
-                .level(this.level)
-                .state(this.state)
-                .build();
     }
 
 }
