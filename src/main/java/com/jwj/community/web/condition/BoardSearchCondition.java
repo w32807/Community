@@ -1,9 +1,11 @@
 package com.jwj.community.web.condition;
 
 import lombok.Data;
+import org.springframework.data.domain.Pageable;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static org.springframework.data.domain.PageRequest.of;
 
 @Data
 public class BoardSearchCondition {
@@ -33,6 +35,10 @@ public class BoardSearchCondition {
 
     public long getOffset(){
         return (long) (max(1, page) - 1) * min(size, MAX_SIZE);
+    }
+
+    public Pageable getPageable(){
+        return of(max(1, page) - 1, min(size, MAX_SIZE));
     }
 
 }

@@ -8,10 +8,9 @@ import com.jwj.community.web.condition.BoardSearchCondition;
 import com.jwj.community.web.exception.exceptions.board.BoardNotFound;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static java.util.Locale.getDefault;
 
@@ -35,7 +34,7 @@ public class BoardService {
         return savedBoard;
     }
 
-    public List<Board> getBoards(BoardSearchCondition condition){
+    public Page<Board> getBoards(BoardSearchCondition condition){
         return boardRepository.getBoards(condition);
     }
 

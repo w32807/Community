@@ -1,6 +1,7 @@
 package com.jwj.community.web.board.controller;
 
 import com.jwj.community.domain.board.service.BoardService;
+import com.jwj.community.domain.entity.Board;
 import com.jwj.community.domain.member.service.MemberService;
 import com.jwj.community.web.annotation.LoginMember;
 import com.jwj.community.web.board.dto.request.BoardSaveRequest;
@@ -12,6 +13,7 @@ import com.jwj.community.web.condition.BoardSearchCondition;
 import com.jwj.community.web.member.dto.LoginMemberDTO;
 import com.jwj.community.web.member.dto.response.WriteMemberResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,8 +34,9 @@ public class BoardRestController {
 
     @GetMapping("/boards")
     public ResponseEntity<ListResult<BoardResponse>> boards(BoardSearchCondition condition){
-        // todo Pageable로 페이징 기능 구현해야 됨
-        List<BoardResponse> boards = boardService.getBoards(condition).stream()
+        Page<Board> page = boardService.getBoards(condition);
+
+        List<BoardResponse> boards = page.stream()
                 .map(board -> {
                     BoardResponse response = of(board);
                     response.setMember(WriteMemberResponse.of(board.getMember()));
@@ -43,6 +46,7 @@ public class BoardRestController {
 
         ListResult<BoardResponse> listResult = ListResult.<BoardResponse>builder()
                 .list(boards)
+                .totalSize(page.getTotalPages())
                 .build();
 
         return ok().body(listResult);

@@ -113,14 +113,14 @@ class BoardServiceTest {
         boardService.addBoard(boardSaveRequest1.toEntity(), savedMember);
         boardService.addBoard(boardSaveRequest2.toEntity(), savedMember);
 
-        List<Board> boards = boardService.getBoards(null);
+        List<Board> boards = boardService.getBoards(null).getContent();
 
         // then
         assertThat(boards.size()).isEqualTo(2);
-        assertThat(boards.get(0).getTitle()).isEqualTo("글 제목1");
-        assertThat(boards.get(0).getContent()).isEqualTo("글 내용1");
-        assertThat(boards.get(1).getTitle()).isEqualTo("글 제목2");
-        assertThat(boards.get(1).getContent()).isEqualTo("글 내용2");
+        assertThat(boards.get(0).getTitle()).isEqualTo("글 제목2");
+        assertThat(boards.get(0).getContent()).isEqualTo("글 내용2");
+        assertThat(boards.get(1).getTitle()).isEqualTo("글 제목1");
+        assertThat(boards.get(1).getContent()).isEqualTo("글 내용1");
     }
 
     @Test

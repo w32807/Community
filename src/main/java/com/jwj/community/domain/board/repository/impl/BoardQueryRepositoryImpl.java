@@ -6,6 +6,8 @@ import com.jwj.community.web.condition.BoardSearchCondition;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,10 +23,8 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Board> getBoards(BoardSearchCondition condition) {
-
-        // type은 글제목, 글내용, 작성자, 조합 3가지
-        return queryFactory
+    public Page<Board> getBoards(BoardSearchCondition condition) {
+        List<Board> boards = queryFactory
                 .selectFrom(board)
                 .leftJoin(board.member, member)
                 .where(searchCondition(condition))
@@ -33,6 +33,16 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
                 .offset(condition.getOffset())
                 .orderBy(board.id.desc())
                 .fetch();
+
+        long total = queryFactory
+                .selectFrom(board)
+                .leftJoin(board.member, member)
+                .where(searchCondition(condition))
+                .fetchJoin()
+                .fetch()
+                .size();
+
+        return new PageImpl<>(boards, condition.getPageable(), total);
     }
 
     private BooleanBuilder searchCondition(BoardSearchCondition condition){
