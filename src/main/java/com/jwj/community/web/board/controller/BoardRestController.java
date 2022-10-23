@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,7 +38,7 @@ public class BoardRestController {
                 .list(boards)
                 .build();
 
-        return new ResponseEntity<>(listResult, OK);
+        return ok().body(listResult);
     }
 
     @GetMapping("/{id}")
@@ -49,7 +49,7 @@ public class BoardRestController {
                 .data(board)
                 .build();
 
-        return new ResponseEntity<>(result, OK);
+        return ok().body(result);
     }
 
     @PostMapping("/board")
@@ -58,7 +58,7 @@ public class BoardRestController {
                 .data(boardService.addBoard(request.toEntity(), memberService.findByEmail(loginMember.getEmail())))
                 .build();
 
-        return new ResponseEntity<>(result, OK);
+        return ok().body(result);
     }
 
     @PutMapping("/board")
@@ -67,7 +67,7 @@ public class BoardRestController {
                 .data(boardService.updateBoard(request.toEntity()))
                 .build();
 
-        return new ResponseEntity<>(result, OK);
+        return ok().body(result);
     }
 
     @DeleteMapping("/{id}")

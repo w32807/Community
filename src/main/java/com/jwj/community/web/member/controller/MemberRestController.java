@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,7 +38,7 @@ public class MemberRestController {
                 .list(members)
                 .build();
 
-        return new ResponseEntity<>(listResult, OK);
+        return ok().body(listResult);
     }
 
     @GetMapping("/member")
@@ -49,7 +49,7 @@ public class MemberRestController {
                 .data(member)
                 .build();
 
-        return new ResponseEntity<>(result, OK);
+        return ok().body(result);
     }
 
     @PostMapping("/addMember")
@@ -63,7 +63,7 @@ public class MemberRestController {
                 .data(memberService.addMember(request.toEntity()))
                 .build();
 
-        return new ResponseEntity<>(result, OK);
+        return ok().body(result);
     }
 
     @PutMapping("/member")
