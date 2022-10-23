@@ -1,35 +1,25 @@
 package com.jwj.community.web.common.result;
 
+import com.jwj.community.web.paging.PageInfo;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+import static com.jwj.community.web.paging.PageInfo.of;
+
 @Data
 public class ListResult<T> {
 
-    public List<T> list;
-    public int size;
-
-    public long pageNumber;
-    public long pageSize;
-    public long totalPage;
-    public long totalSize;
+    private final List<T> list;
+    private final int size;
+    private final PageInfo pageInfo;
 
     @Builder
     public ListResult(List<T> list, Page page) {
         this.list = list;
         this.size = list.size();
-        this.pageNumber = page.getPageable().getPageNumber();
-        this.pageSize = page.getPageable().getPageSize();
-        this.totalPage = page.getTotalPages();
-        this.totalSize = page.getTotalElements();
-    }
-
-    @Builder
-    public ListResult(List<T> list) {
-        this.list = list;
-        this.size = list.size();
+        this.pageInfo = of(page);
     }
 }
