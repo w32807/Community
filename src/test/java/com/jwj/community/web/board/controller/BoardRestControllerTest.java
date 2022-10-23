@@ -61,6 +61,8 @@ class BoardRestControllerTest {
 
     private String saveMemberEmail = "admin@google.com";
 
+    private String saveMemberNickname = "test nickname";
+
     private Member savedMember;
 
     private String accessToken;
@@ -70,6 +72,7 @@ class BoardRestControllerTest {
         MemberSaveRequest memberSaveRequest = MemberSaveRequest.builder()
                 .email(saveMemberEmail)
                 .password("1234")
+                .nickname(saveMemberNickname)
                 .build();
 
         // given
@@ -108,9 +111,13 @@ class BoardRestControllerTest {
                 .andExpect(jsonPath("$.list.[0].id").value(1))
                 .andExpect(jsonPath("$.list.[0].title").value("글 제목1"))
                 .andExpect(jsonPath("$.list.[0].content").value("글 내용1"))
+                .andExpect(jsonPath("$.list.[0].member.email").value(saveMemberEmail))
+                .andExpect(jsonPath("$.list.[0].member.nickname").value(saveMemberNickname))
                 .andExpect(jsonPath("$.list.[1].id").value(2))
                 .andExpect(jsonPath("$.list.[1].title").value("글 제목2"))
                 .andExpect(jsonPath("$.list.[1].content").value("글 내용2"))
+                .andExpect(jsonPath("$.list.[1].member.email").value(saveMemberEmail))
+                .andExpect(jsonPath("$.list.[1].member.nickname").value(saveMemberNickname))
                 .andDo(print());
     }
 

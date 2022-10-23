@@ -9,6 +9,7 @@ import com.jwj.community.web.board.dto.response.BoardResponse;
 import com.jwj.community.web.common.result.ListResult;
 import com.jwj.community.web.common.result.Result;
 import com.jwj.community.web.member.dto.LoginMemberDTO;
+import com.jwj.community.web.member.dto.response.WriteMemberResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,11 @@ public class BoardRestController {
     public ResponseEntity<ListResult<BoardResponse>> boards(){
         // todo Pageable로 페이징 기능 구현해야 됨
         List<BoardResponse> boards = boardService.getBoards().stream()
-                .map(board -> of(board))
+                .map(board -> {
+                    BoardResponse response = of(board);
+                    response.setMember(WriteMemberResponse.of(board.getMember()));
+                    return response;
+                })
                 .collect(toList());
 
         ListResult<BoardResponse> listResult = ListResult.<BoardResponse>builder()
@@ -44,10 +49,8 @@ public class BoardRestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Result<BoardResponse>> board(@PathVariable("id") Long id){
-        BoardResponse board = of(boardService.getBoard(id));
-
         Result<BoardResponse> result = Result.<BoardResponse>builder()
-                .data(board)
+                .data(of(boardService.getBoard(id)))
                 .build();
 
         return ok().body(result);
