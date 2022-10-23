@@ -30,7 +30,6 @@ const login = function (){
     .catch(function(error){
     });
 }
-
 </script>
 
 <template>
