@@ -1,7 +1,6 @@
 package com.jwj.community.domain.entity;
 
 import com.jwj.community.domain.board.dto.BoardEditor;
-import com.jwj.community.web.board.dto.response.BoardResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -68,11 +67,4 @@ public class Board extends BaseEntity{
         this.views = min(++views, MAX_VALUE);
     }
 
-    public BoardResponse toResponse(){
-        return BoardResponse.builder()
-                .id(this.id)
-                .title(this.title)
-                .content(this.content)
-                .build();
-    }
 }

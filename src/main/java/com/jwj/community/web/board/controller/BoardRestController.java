@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static com.jwj.community.web.board.dto.response.BoardResponse.of;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -31,7 +32,7 @@ public class BoardRestController {
     public ResponseEntity<ListResult<BoardResponse>> boards(){
         // todo Pageable로 페이징 기능 구현해야 됨
         List<BoardResponse> boards = boardService.getBoards().stream()
-                .map(board -> board.toResponse())
+                .map(board -> of(board))
                 .collect(toList());
 
         ListResult<BoardResponse> listResult = ListResult.<BoardResponse>builder()
@@ -43,7 +44,7 @@ public class BoardRestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Result<BoardResponse>> board(@PathVariable("id") Long id){
-        BoardResponse board = boardService.getBoard(id).toResponse();
+        BoardResponse board = of(boardService.getBoard(id));
 
         Result<BoardResponse> result = Result.<BoardResponse>builder()
                 .data(board)
