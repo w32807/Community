@@ -8,6 +8,7 @@ import com.jwj.community.web.board.dto.request.BoardUpdateRequest;
 import com.jwj.community.web.board.dto.response.BoardResponse;
 import com.jwj.community.web.common.result.ListResult;
 import com.jwj.community.web.common.result.Result;
+import com.jwj.community.web.condition.BoardSearchCondition;
 import com.jwj.community.web.member.dto.LoginMemberDTO;
 import com.jwj.community.web.member.dto.response.WriteMemberResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +31,9 @@ public class BoardRestController {
     private final BoardService boardService;
 
     @GetMapping("/boards")
-    public ResponseEntity<ListResult<BoardResponse>> boards(){
+    public ResponseEntity<ListResult<BoardResponse>> boards(BoardSearchCondition condition){
         // todo Pageable로 페이징 기능 구현해야 됨
-        List<BoardResponse> boards = boardService.getBoards().stream()
+        List<BoardResponse> boards = boardService.getBoards(condition).stream()
                 .map(board -> {
                     BoardResponse response = of(board);
                     response.setMember(WriteMemberResponse.of(board.getMember()));

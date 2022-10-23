@@ -22,8 +22,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
+import java.util.stream.IntStream;
 
 import static com.jwj.community.web.member.jwt.JwtConst.AUTHORIZATION;
+import static org.hamcrest.Matchers.contains;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -36,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc // SpringBootTest와 MockMvc 주입을 같이할 때 사용!
 @Transactional
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+// jsonPath 문서 : https://github.com/json-path/JsonPath
 class BoardRestControllerTest {
 
     @Autowired
@@ -108,14 +111,14 @@ class BoardRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size").value(2))
                 .andExpect(jsonPath("$.list.length()").value(2))
-                .andExpect(jsonPath("$.list.[0].id").value(1))
-                .andExpect(jsonPath("$.list.[0].title").value("글 제목1"))
-                .andExpect(jsonPath("$.list.[0].content").value("글 내용1"))
+                .andExpect(jsonPath("$.list.[0].id").value(2))
+                .andExpect(jsonPath("$.list.[0].title").value("글 제목2"))
+                .andExpect(jsonPath("$.list.[0].content").value("글 내용2"))
                 .andExpect(jsonPath("$.list.[0].member.email").value(saveMemberEmail))
                 .andExpect(jsonPath("$.list.[0].member.nickname").value(saveMemberNickname))
-                .andExpect(jsonPath("$.list.[1].id").value(2))
-                .andExpect(jsonPath("$.list.[1].title").value("글 제목2"))
-                .andExpect(jsonPath("$.list.[1].content").value("글 내용2"))
+                .andExpect(jsonPath("$.list.[1].id").value(1))
+                .andExpect(jsonPath("$.list.[1].title").value("글 제목1"))
+                .andExpect(jsonPath("$.list.[1].content").value("글 내용1"))
                 .andExpect(jsonPath("$.list.[1].member.email").value(saveMemberEmail))
                 .andExpect(jsonPath("$.list.[1].member.nickname").value(saveMemberNickname))
                 .andDo(print());
@@ -341,6 +344,245 @@ class BoardRestControllerTest {
                 .andExpect(jsonPath("$.errorCode").value(String.valueOf(BAD_REQUEST.value())))
                 .andExpect(jsonPath("$.fieldErrors.[0].field").value("content"))
                 .andExpect(jsonPath("$.fieldErrors.[0].message").value(messageSource.getMessage("field.required.content", null, Locale.getDefault())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 여러 개 조회 시 페이징 - 1번째 페이지")
+    void test12() throws Exception{
+        // given
+        IntStream.rangeClosed(1, 25).forEach(i -> {
+            BoardSaveRequest request = BoardSaveRequest.builder()
+                    .title("글 제목" + i)
+                    .content("글 내용" + i)
+                    .build();
+
+            boardService.addBoard(request.toEntity(), savedMember);
+        });
+
+        // expected
+        mockMvc.perform(get("/api/board/boards?page=1")
+                .header(AUTHORIZATION, accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size").value(10))
+                .andExpect(jsonPath("$..id").value(contains(25,24,23,22,21,20,19,18,17,16)))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 여러 개 조회 시 페이징 - 2번째 페이지")
+    void test13() throws Exception{
+        // given
+        IntStream.rangeClosed(1, 25).forEach(i -> {
+            BoardSaveRequest request = BoardSaveRequest.builder()
+                    .title("글 제목" + i)
+                    .content("글 내용" + i)
+                    .build();
+
+            boardService.addBoard(request.toEntity(), savedMember);
+        });
+
+        // expected
+        mockMvc.perform(get("/api/board/boards?page=2")
+                .header(AUTHORIZATION, accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size").value(10))
+                .andExpect(jsonPath("$..id").value(contains(15,14,13,12,11,10,9,8,7,6)))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 여러 개 조회 시 페이징 - 3번째 페이지")
+    void test14() throws Exception{
+        // given
+        IntStream.rangeClosed(1, 25).forEach(i -> {
+            BoardSaveRequest request = BoardSaveRequest.builder()
+                    .title("글 제목" + i)
+                    .content("글 내용" + i)
+                    .build();
+
+            boardService.addBoard(request.toEntity(), savedMember);
+        });
+
+        // expected
+        mockMvc.perform(get("/api/board/boards?page=3")
+                .header(AUTHORIZATION, accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size").value(5))
+                .andExpect(jsonPath("$..id").value(contains(5,4,3,2,1)))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 여러 개 조회 시 페이징 - 페이지번호 0일때 첫번 째 페이지")
+    void test15() throws Exception{
+        // given
+        IntStream.rangeClosed(1, 25).forEach(i -> {
+            BoardSaveRequest request = BoardSaveRequest.builder()
+                    .title("글 제목" + i)
+                    .content("글 내용" + i)
+                    .build();
+
+            boardService.addBoard(request.toEntity(), savedMember);
+        });
+
+        // expected
+        mockMvc.perform(get("/api/board/boards?page=0")
+                .header(AUTHORIZATION, accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size").value(10))
+                .andExpect(jsonPath("$..id").value(contains(25,24,23,22,21,20,19,18,17,16)))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 여러 개 조회 시 페이징 - 페이지번호 음수일 때 첫번 째 페이지")
+    void test16() throws Exception{
+        // given
+        IntStream.rangeClosed(1, 25).forEach(i -> {
+            BoardSaveRequest request = BoardSaveRequest.builder()
+                    .title("글 제목" + i)
+                    .content("글 내용" + i)
+                    .build();
+
+            boardService.addBoard(request.toEntity(), savedMember);
+        });
+
+        // expected
+        mockMvc.perform(get("/api/board/boards?page=-100")
+                .header(AUTHORIZATION, accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size").value(10))
+                .andExpect(jsonPath("$..id").value(contains(25,24,23,22,21,20,19,18,17,16)))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 여러 개 조회 시 페이징 - 글제목으로 조회 및 결과있을 때")
+    void test17() throws Exception{
+        // given
+        IntStream.rangeClosed(1, 25).forEach(i -> {
+            BoardSaveRequest request = BoardSaveRequest.builder()
+                    .title("글 제목" + i)
+                    .content("글 내용" + i)
+                    .build();
+
+            boardService.addBoard(request.toEntity(), savedMember);
+        });
+
+        // expected
+        mockMvc.perform(get("/api/board/boards?page=1&keyword=제목")
+                .header(AUTHORIZATION, accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size").value(10))
+                .andExpect(jsonPath("$..id").value(contains(25,24,23,22,21,20,19,18,17,16)))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 여러 개 조회 시 페이징 - 글제목으로 조회 및 결과없을 때")
+    void test18() throws Exception{
+        // given
+        IntStream.rangeClosed(1, 25).forEach(i -> {
+            BoardSaveRequest request = BoardSaveRequest.builder()
+                    .title("글 제목" + i)
+                    .content("글 내용" + i)
+                    .build();
+
+            boardService.addBoard(request.toEntity(), savedMember);
+        });
+
+        // expected
+        mockMvc.perform(get("/api/board/boards?page=1&keyword=결과없는 검색어")
+                .header(AUTHORIZATION, accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size").value(0))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 여러 개 조회 시 페이징 - 글내용으로 조회 및 결과있을 때")
+    void test19() throws Exception{
+        // given
+        IntStream.rangeClosed(1, 25).forEach(i -> {
+            BoardSaveRequest request = BoardSaveRequest.builder()
+                    .title("글 제목" + i)
+                    .content("글 내용" + i)
+                    .build();
+
+            boardService.addBoard(request.toEntity(), savedMember);
+        });
+
+        // expected
+        mockMvc.perform(get("/api/board/boards?page=1&keyword=4&searchType=C")
+                .header(AUTHORIZATION, accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size").value(3))
+                .andExpect(jsonPath("$..id").value(contains(24, 14, 4)))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 여러 개 조회 시 페이징 - 글내용으로 조회 및 결과없을 때")
+    void test20() throws Exception{
+        // given
+        IntStream.rangeClosed(1, 25).forEach(i -> {
+            BoardSaveRequest request = BoardSaveRequest.builder()
+                    .title("글 제목" + i)
+                    .content("글 내용" + i)
+                    .build();
+
+            boardService.addBoard(request.toEntity(), savedMember);
+        });
+
+        // expected
+        mockMvc.perform(get("/api/board/boards?page=1&keyword=결과없는 검색어&searchType=C")
+                .header(AUTHORIZATION, accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size").value(0))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 여러 개 조회 시 페이징 - 작성자로 조회 및 결과있을 때")
+    void test21() throws Exception{
+        // given
+        IntStream.rangeClosed(1, 25).forEach(i -> {
+            BoardSaveRequest request = BoardSaveRequest.builder()
+                    .title("글 제목" + i)
+                    .content("글 내용" + i)
+                    .build();
+
+            boardService.addBoard(request.toEntity(), savedMember);
+        });
+
+        // expected
+        mockMvc.perform(get("/api/board/boards?page=1&keyword=test nickname&searchType=w")
+                .header(AUTHORIZATION, accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size").value(10))
+                .andExpect(jsonPath("$..id").value(contains(25,24,23,22,21,20,19,18,17,16)))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 여러 개 조회 시 페이징 - 작성자로 조회 및 결과없을 때")
+    void test22() throws Exception{
+        // given
+        IntStream.rangeClosed(1, 25).forEach(i -> {
+            BoardSaveRequest request = BoardSaveRequest.builder()
+                    .title("글 제목" + i)
+                    .content("글 내용" + i)
+                    .build();
+
+            boardService.addBoard(request.toEntity(), savedMember);
+        });
+
+        // expected
+        mockMvc.perform(get("/api/board/boards?page=1&keyword=결과없는 검색어&searchType=w")
+                .header(AUTHORIZATION, accessToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size").value(0))
                 .andDo(print());
     }
 }

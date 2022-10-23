@@ -4,6 +4,7 @@ import com.jwj.community.domain.board.dto.BoardEditor;
 import com.jwj.community.domain.board.repository.BoardRepository;
 import com.jwj.community.domain.entity.Board;
 import com.jwj.community.domain.entity.Member;
+import com.jwj.community.web.condition.BoardSearchCondition;
 import com.jwj.community.web.exception.exceptions.board.BoardNotFound;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -34,8 +35,8 @@ public class BoardService {
         return savedBoard;
     }
 
-    public List<Board> getBoards(){
-        return boardRepository.getBoards();
+    public List<Board> getBoards(BoardSearchCondition condition){
+        return boardRepository.getBoards(condition);
     }
 
     public void deleteBoard(Long id){

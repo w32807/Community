@@ -113,7 +113,7 @@ class BoardServiceTest {
         boardService.addBoard(boardSaveRequest1.toEntity(), savedMember);
         boardService.addBoard(boardSaveRequest2.toEntity(), savedMember);
 
-        List<Board> boards = boardService.getBoards();
+        List<Board> boards = boardService.getBoards(null);
 
         // then
         assertThat(boards.size()).isEqualTo(2);
