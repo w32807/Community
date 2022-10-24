@@ -15,6 +15,7 @@ public class BoardResponse {
     private Long id;
     private String title;
     private String content;
+    private Integer views = 0;
     private WriteMemberResponse member;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -25,6 +26,7 @@ public class BoardResponse {
                 .id(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
+                .views(board.getViews())
                 .regDate(board.getRegDate())
                 .regDate(board.getModDate())
                 .build();

@@ -80,7 +80,7 @@ function getBoardsWithCondition(){
             <el-table-column prop="title" label="제목" header-align="center"/>
             <el-table-column prop="regDate" label="등록일" header-align="center" align="center" width="200"/>
             <el-table-column prop="member.nickname" label="작성자" header-align="center" align="center" width="200"/>
-            <el-table-column prop="member.nickname" label="조회수" header-align="center" align="center" width="200"/>
+            <el-table-column prop="views" label="조회수" header-align="center" align="center" width="200"/>
         </el-table>
         <el-pagination class="mt-2"
             layout="prev, pager, next"

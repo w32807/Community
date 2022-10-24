@@ -26,7 +26,7 @@ public class Board extends BaseEntity{
     @Lob
     private String content;
 
-    private int views = 0;
+    private Integer views = 0;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Member member;
