@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import WriteView from "../views/WriteView.vue";
+import BoardWriteView from "../views/BoardWriteView.vue";
+import BoardReadView from "../views/BoardReadView.vue";
 import LoginView from "../views/LoginView.vue";
 import store from "../store";
 import { ElStep } from "element-plus";
@@ -16,8 +17,14 @@ const router = createRouter({
     {
       path: "/write",
       name: "write",
-      component: WriteView,
+      component: BoardWriteView,
       meta: { authorization: true }
+    },
+    {
+      path: "/read",
+      name: "read",
+      component: BoardReadView,
+      props: true // true로 설정하여 데이터를 전달 받을 수 있다.
     },
     {
       path: "/login",

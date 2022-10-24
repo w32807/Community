@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import {ref} from "vue";
-import {Search} from '@element-plus/icons-vue'
+import {Search} from '@element-plus/icons-vue';
+import {useRouter} from "vue-router";
 import axios from "../config/axios-config";
 
 // ref로 감싸서 반응형 데이터로 취급한다.
-const boards = ref([] as any);
+const router = useRouter();
+const boards = ref([]);
 const pageNumber = ref(1);
 const pageSize = ref(0);
 const totalSize = ref(0);
@@ -41,6 +43,11 @@ function getBoardsWithCondition(){
     getBoards();
 }
 
+function readBoard(row:any){
+    console.log(row.id)
+    router.push({name: "read", query:{boardId: row.id}});
+}
+
 </script>
 <!--
     [[element-plus에서 속성, 이벤트, 메소드 적용하기]]
@@ -75,7 +82,7 @@ function getBoardsWithCondition(){
                 </el-input>
             </el-col>
         </el-row>
-        <el-table class="mt-2" :data="boards" border style="width: 100%">
+        <el-table class="mt-2" :data="boards" border style="width: 100%" @row-click="readBoard">
             <el-table-column prop="id" label="글번호" header-align="center" align="center" width="100"/>
             <el-table-column prop="title" label="제목" header-align="center"/>
             <el-table-column prop="regDate" label="등록일" header-align="center" align="center" width="200"/>
